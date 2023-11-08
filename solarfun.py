@@ -192,6 +192,9 @@ def calculate_B_0_horizontal(hours_year, hour_0, longitude, latitude):
                             in zip(hours_year,solar_altitude_)]
     return B_0_horizontal_
 
+def calculate_G_0_horizontal(K_t,B_0_horizontal_):
+    G_0_h = K_t * B_0_horizontal
+    return G_0_h
 
 #def G_ground_horizontal(day,solar_altitude): # alternative definition, if you 
 #    """                                      # don't have information on

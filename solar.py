@@ -10,7 +10,8 @@ from datetime import timedelta
 from solarfun import (calculate_B_0_horizontal,
                       calculate_G_ground_horizontal,                      
                       calculate_diffuse_fraction,
-                      calculate_incident_angle)
+                      calculate_incident_angle,
+                      calculate_G_0_horizontal)
 
 
 # tilt representes inclination of the solar panel (in degress), orientation
@@ -19,6 +20,7 @@ tilt=13;
 orientation=0;
 lat = 56.15886367 # latitude
 lon = 10.215740203 # longitude
+K_t = 0.7
 
 year = 2018
 hour_0 = datetime(year,1,1,0,0,0) - timedelta(hours=1)
@@ -44,6 +46,9 @@ timeseries['B_0_h'] = calculate_B_0_horizontal(hours, hour_0, lon, lat)
 # Clearness index is assumed to be equal to 0.8 at every hour
 timeseries['K_t']=0.7*np.ones(len(hours))  
 
+# Timeseries G_zero
+timeseries['G_0_h'] = calculate_G_0_horizontal(K_t,B_0_h)
+
 # Calculate global horizontal irradiance on the ground
 [timeseries['G_ground_h'], timeseries['solar_altitude']] = calculate_G_ground_horizontal(hours, hour_0, lon, lat, timeseries['K_t'])
 
@@ -67,6 +72,3 @@ ax1.plot(timeseries['D_ground_h']['2018-06-01 00:00':'2018-06-08 00:00'],
          label='D_ground_h', color= 'purple')
 ax1.legend(fancybox=True, shadow=True,fontsize=12, loc='best')
 ax1.set_ylabel('W/m2')
-
-#Change
-var = 1

@@ -42,7 +42,7 @@ timeseries = pd.DataFrame(
 timeseries['B_0_h'] = calculate_B_0_horizontal(hours, hour_0, lon, lat)  
 
 # Clearness index is assumed to be equal to 0.8 at every hour
-timeseries['K_t']=0.8*np.ones(len(hours))  
+timeseries['K_t']=0.7*np.ones(len(hours))  
 
 # Calculate global horizontal irradiance on the ground
 [timeseries['G_ground_h'], timeseries['solar_altitude']] = calculate_G_ground_horizontal(hours, hour_0, lon, lat, timeseries['K_t'])
@@ -59,11 +59,11 @@ plt.figure(figsize=(20, 10))
 gs1 = gridspec.GridSpec(2, 2)
 #gs1.update(wspace=0.3, hspace=0.3)
 ax1 = plt.subplot(gs1[0,0])
-ax1.plot(timeseries['G_ground_h']['2018-06-21 01:00':'2018-06-22 23:00'], 
+ax1.plot(timeseries['G_ground_h']['2018-06-01 00:00':'2018-06-08 00:00'], 
          label='G_ground_h', color='blue')
-ax1.plot(timeseries['B_ground_h']['2018-06-21 01:00':'2018-06-22 23:00'], 
+ax1.plot(timeseries['B_ground_h']['2018-06-01 00:00':'2018-06-08 00:00'], 
          label='B_ground_h', color= 'orange')
-ax1.plot(timeseries['D_ground_h']['2018-06-21 01:00':'2018-06-22 23:00'], 
+ax1.plot(timeseries['D_ground_h']['2018-06-01 00:00':'2018-06-08 00:00'], 
          label='D_ground_h', color= 'purple')
 ax1.legend(fancybox=True, shadow=True,fontsize=12, loc='best')
 ax1.set_ylabel('W/m2')

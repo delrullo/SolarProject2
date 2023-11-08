@@ -15,10 +15,10 @@ from solarfun import (calculate_B_0_horizontal,
 
 # tilt representes inclination of the solar panel (in degress), orientation
 # in degress (south=0)
-tilt=10;
+tilt=13;
 orientation=0;
-lat = 40 # latitude
-lon = 0 # longitude
+lat = 56.15886367 # latitude
+lon = 10.215740203 # longitude
 
 year = 2018
 hour_0 = datetime(year,1,1,0,0,0) - timedelta(hours=1)

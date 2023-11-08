@@ -67,3 +67,6 @@ ax1.plot(timeseries['D_ground_h']['2018-06-01 00:00':'2018-06-08 00:00'],
          label='D_ground_h', color= 'purple')
 ax1.legend(fancybox=True, shadow=True,fontsize=12, loc='best')
 ax1.set_ylabel('W/m2')
+
+#Change
+var = 1

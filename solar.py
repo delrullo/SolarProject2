@@ -13,6 +13,10 @@ from solarfun import (calculate_B_0_horizontal,
                       calculate_incident_angle,
                       solar_altitude)
 
+# Load the Excel file
+data = pd.read_csv('weather_data.csv')
+
+
 
 
 # tilt representes inclination of the solar panel (in degress), orientation

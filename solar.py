@@ -21,8 +21,19 @@ def import_data(dataset):
 
 # Load the CSV file using the import_data function
 data = import_data('weather_data.csv')
+#data.index = data.index.fillna(method='ffill')
+#data['Temp'] = data['Temp'].interpolate(method='linear')
+#data['Cloud'] = data['Cloud'].interpolate(method='linear')
+time_gap = pd.Timedelta('1 hour')
 
+# Interpolate missing values in 'Temperature' and 'Cloud' columns based on timestamp
+data['Temp'] = data['Temp'].interpolate(method='time', limit_area='inside', limit=time_gap)
+data['Cloud'] = data['Cloud'].interpolate(method='time', limit_area='inside', limit=time_gap)
 
+print(data)
+
+# If you want to fill NaN values at the beginning or end of the dataframe, you can use:
+#data = data.ffill().bfill()
 
 
 

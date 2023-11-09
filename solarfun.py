@@ -193,7 +193,9 @@ def calculate_B_0_horizontal(hours_year, hour_0, longitude, latitude):
     return B_0_horizontal_
 
 def calculate_G_0_horizontal(K_t,B_0_horizontal_):
-    G_0_h = K_t * B_0_horizontal
+    G_0_H = np.multiply(timeseries['K_t'], timeseries['B_0_h'])
+
+   # G_0_h = K_t * B_0_horizontal
     return G_0_h
 
 #def G_ground_horizontal(day,solar_altitude): # alternative definition, if you 

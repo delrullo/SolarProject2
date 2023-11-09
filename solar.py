@@ -87,7 +87,30 @@ plt.tight_layout()
 # Show the plot
 plt.show()
 
+# Create a subplot with 2 rows and 1 column
+fig, (ax3, ax4) = plt.subplots(2, 1, figsize=(12, 10))
 
+# Plotting diffuse fraction time series for the first week of July
+ax3.plot(timeseries['F']['2018-07-01 00:00':'2018-07-08 00:00'], label='Diffuse Fraction (July)', color='orange')
+ax3.set_title('Diffuse Fraction Time Series (July 1st - July 8th)')
+ax3.set_xlabel('Time')
+ax3.set_ylabel('Diffuse Fraction')
+ax3.legend()
+ax3.grid(True)
+
+# Plotting diffuse fraction time series for the first week of February
+ax4.plot(timeseries['F']['2018-02-01 00:00':'2018-02-08 00:00'], label='Diffuse Fraction (February)', color='purple')
+ax4.set_title('Diffuse Fraction Time Series (Feb 1st - Feb 8th)')
+ax4.set_xlabel('Time')
+ax4.set_ylabel('Diffuse Fraction')
+ax4.legend()
+ax4.grid(True)
+
+# Adjust layout for better spacing
+plt.tight_layout()
+
+# Show the plot
+plt.show()
 
 
 plt.figure(figsize=(20, 10))

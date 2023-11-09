@@ -13,8 +13,15 @@ from solarfun import (calculate_B_0_horizontal,
                       calculate_incident_angle,
                       solar_altitude)
 
-# Load the Excel file
-data = pd.read_csv('weather_data.csv')
+def import_data(dataset):
+    df = pd.read_csv(dataset,sep=';',index_col='TimeStamp')
+    df = df[['Cloud', 'Temp']]
+    df.index = pd.to_datetime(df.index)
+    return df
+
+# Load the CSV file using the import_data function
+data = import_data('weather_data.csv')
+
 
 
 

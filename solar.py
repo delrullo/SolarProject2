@@ -67,6 +67,7 @@ print(data)
 # in degress (south=0)
 tilt=13;
 orientation=0;
+# Navitas coordinates
 lat = 56.15886367 # latitude
 lon = 10.215740203 # longitude
 K_t = 0.7

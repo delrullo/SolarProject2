@@ -40,7 +40,6 @@ complete_index = pd.date_range(start=data.index.min(), end=data.index.max(), fre
     # Drop duplicate labels in the index
 data = data[~data.index.duplicated(keep='first')]
 
-
 # Reindex the DataFrame to include all hours
 data = data.reindex(complete_index)
 
@@ -92,7 +91,7 @@ timeseries['D_0_h'] = timeseries['G_0_h'] * data['Cloud']/100
 # Calculate global horizontal irradiance on the ground
 [timeseries['G_ground_h'], timeseries['solar_altitude']] = calculate_G_ground_horizontal(hours, hour_0, lon, lat, timeseries['K_t'])
 
-# Calculate diffuse fraction
+# Calculate the use fraction
 timeseries['F'] = calculate_diffuse_fraction(hours, hour_0, lon, lat, timeseries['K_t'])
 
 # Calculate direct and diffuse irradiance on the horizontal surface
@@ -165,4 +164,5 @@ ax1.plot(timeseries['D_ground_h']['2018-06-01 00:00':'2018-06-08 00:00'],
          label='D_ground_h', color= 'purple')
 ax1.legend(fancybox=True, shadow=True,fontsize=12, loc='best')
 ax1.set_ylabel('W/m2')
+
 

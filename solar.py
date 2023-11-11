@@ -19,21 +19,47 @@ def import_data(dataset):
     df.index = pd.to_datetime(df.index)
     return df
 
+def interpolate_missing_data(df):
+    # Calculate time differences between consecutive timestamps
+    time_diff = df.index.to_series().diff()
+    
+    # Identify timestamps with a time difference of more than 1 hour
+    missing_timestamps = time_diff[time_diff > pd.Timedelta('1 hour')].index
+    
+    # Interpolate missing values for Cloud and Temp
+    for timestamp in missing_timestamps:
+        next_timestamp = timestamp + pd.Timedelta('1 hour')
+        if next_timestamp in df.index:
+            # Interpolate directly on the DataFrame for the selected time range
+           df.loc[timestamp:next_timestamp] = df.loc[timestamp:next_timestamp].interpolate(
+               method='linear', limit_area='inside', limit=1
+          
+                )
+    
+    return df
+
+
 # Load the CSV file using the import_data function
 data = import_data('weather_data.csv')
-#data.index = data.index.fillna(method='ffill')
-#data['Temp'] = data['Temp'].interpolate(method='linear')
-#data['Cloud'] = data['Cloud'].interpolate(method='linear')
-time_gap = pd.Timedelta('1 hour')
 
-# Interpolate missing values in 'Temperature' and 'Cloud' columns based on timestamp
-data['Temp'] = data['Temp'].interpolate(method='time', limit_area='inside', limit=time_gap)
-data['Cloud'] = data['Cloud'].interpolate(method='time', limit_area='inside', limit=time_gap)
+data = interpolate_missing_data(data)
+
+
+# Identify missing timestamps with a gap more than 1 hour
+missing_timestamps = pd.date_range(start=data.index.min(), end=data.index.max(), freq='H').difference(data.index)
+
+# Filter the missing timestamps based on your condition (gap more than 1 hour)
+missing_timestamps_with_gap = [timestamp for timestamp in missing_timestamps if (timestamp - data.index.max()).total_seconds() > 3600]
+
+# Add NaN values for the missing timestamps
+data = data.reindex(data.index.union(missing_timestamps_with_gap))
+
+# Forward-fill and backward-fill NaN values
+data['Temp'] = data['Temp'].ffill().bfill()
+data['Cloud'] = data['Cloud'].ffill().bfill()
 
 print(data)
 
-# If you want to fill NaN values at the beginning or end of the dataframe, you can use:
-#data = data.ffill().bfill()
 
 
 

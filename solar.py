@@ -73,7 +73,7 @@ timeseries['K_t']=0.7*np.ones(len(hours))
 timeseries['G_0_h'] = timeseries['K_t'] * timeseries['B_0_h']
 
 # Time series D_0
-#timeseries['D_0_h'] = timeseries[G_0_H] * 
+timeseries['D_0_h'] = timeseries['G_0_H'] * timeseries['Cloud']/100
 
 # Calculate global horizontal irradiance on the ground
 [timeseries['G_ground_h'], timeseries['solar_altitude']] = calculate_G_ground_horizontal(hours, hour_0, lon, lat, timeseries['K_t'])

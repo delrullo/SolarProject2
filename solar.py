@@ -11,7 +11,8 @@ from solarfun import (calculate_B_0_horizontal,
                       calculate_G_ground_horizontal,                      
                       calculate_diffuse_fraction,
                       calculate_incident_angle,
-                      solar_altitude)
+                      solar_altitude,
+                      calculate_B_0_h_new)
 
 def import_data(dataset):
     df = pd.read_csv(dataset,sep=';',index_col='TimeStamp')
@@ -19,46 +20,19 @@ def import_data(dataset):
     df.index = pd.to_datetime(df.index)
     return df
 
-def interpolate_missing_data(df):
-    # Calculate time differences between consecutive timestamps
-    time_diff = df.index.to_series().diff()
-    
-    # Identify timestamps with a time difference of more than 1 hour
-    missing_timestamps = time_diff[time_diff > pd.Timedelta('1 hour')].index
-    
-    # Interpolate missing values for Cloud and Temp
-    for timestamp in missing_timestamps:
-        next_timestamp = timestamp + pd.Timedelta('1 hour')
-        if next_timestamp in df.index:
-            # Interpolate directly on the DataFrame for the selected time range
-           df.loc[timestamp:next_timestamp] = df.loc[timestamp:next_timestamp].interpolate(
-               method='linear', limit_area='inside', limit=1
-          
-                )
-    
-    return df
+
 
 
 # Load the CSV file using the import_data function
 data = import_data('weather_data.csv')
+data = data[~data.index.duplicated(keep='first')]
 
-data = interpolate_missing_data(data)
 
 
-# Identify missing timestamps with a gap more than 1 hour
-missing_timestamps = pd.date_range(start=data.index.min(), end=data.index.max(), freq='H').difference(data.index)
 
-# Filter the missing timestamps based on your condition (gap more than 1 hour)
-missing_timestamps_with_gap = [timestamp for timestamp in missing_timestamps if (timestamp - data.index.max()).total_seconds() > 3600]
 
-# Add NaN values for the missing timestamps
-data = data.reindex(data.index.union(missing_timestamps_with_gap))
 
-# Forward-fill and backward-fill NaN values
-data['Temp'] = data['Temp'].ffill().bfill()
-data['Cloud'] = data['Cloud'].ffill().bfill()
 
-print(data)
 
 
 
@@ -99,19 +73,22 @@ timeseries['K_t']=0.7*np.ones(len(hours))
 # Timeseries G_zero
 timeseries['G_0_h'] = timeseries['K_t'] * timeseries['B_0_h']
 
-# Time series D_0
-timeseries['D_0_h'] = timeseries['G_0_H'] * timeseries['Cloud']/100
+
+
+timeseries['D_0_h'] = timeseries['G_0_h'] *( data['Cloud']/100)
 
 # Calculate global horizontal irradiance on the ground
 [timeseries['G_ground_h'], timeseries['solar_altitude']] = calculate_G_ground_horizontal(hours, hour_0, lon, lat, timeseries['K_t'])
 
-# Calculate diffuse fraction
+# Calculate the use fraction
 timeseries['F'] = calculate_diffuse_fraction(hours, hour_0, lon, lat, timeseries['K_t'])
 
 # Calculate direct and diffuse irradiance on the horizontal surface
 timeseries['B_ground_h']=[x*(1-y) for x,y in zip(timeseries['G_ground_h'], timeseries['F'])]
 timeseries['D_ground_h']=[x*y for x,y in zip(timeseries['G_ground_h'], timeseries['F'])]
 
+# Calculate extraterrestrial irradiance
+timeseries['B_0_h_new'] = calculate_B_0_h_new(timeseries['G_0_h'], timeseries['D_0_h'])
 
 # Create a subplot with 2 rows and 1 column
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 10))
@@ -176,4 +153,5 @@ ax1.plot(timeseries['D_ground_h']['2018-06-01 00:00':'2018-06-08 00:00'],
          label='D_ground_h', color= 'purple')
 ax1.legend(fancybox=True, shadow=True,fontsize=12, loc='best')
 ax1.set_ylabel('W/m2')
+
 

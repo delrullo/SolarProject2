@@ -287,6 +287,20 @@ def calculate_diffuse_fraction(hours_year, hour_0, longitude, latitude, clearnes
                             in zip(solar_altitude_, clearness_index_)]
     return difuse_fraction_
     
+def calculate_B_0_h_new(G_0_h, D_0_h):
+    """
+    Calculate direct irradiance on the horizontal ground surface, in W/m2
+
+    Parameters:
+        G_0_h: Global horizontal irradiance on the horizontal ground surface, in W/m2
+        D_0_h: Diffuse irradiance on the horizontal ground surface, in W/m2
+
+    Returns:
+        B_0_h: Direct irradiance on the horizontal ground surface, in W/m2
+    """
+    B_0_h = G_0_h - D_0_h
+    return B_0_h
+
 
 def incident_angle(hour, hour_0, longitude, latitude, tilt, orientation):    
     """

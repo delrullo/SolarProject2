@@ -106,7 +106,7 @@ timeseries['B_0_h_new'] = calculate_B_0_h_new(timeseries['G_0_h'], timeseries['D
 # Direct radiation D(B) 
 
 # Diffuse radiation D(D) *isotropic*
-timeseries[D_D] = timeseries[D_0_h] * (1 + np-cos(beta))/2
+timeseries['D_D'] = timeseries['D_0_h'] * (1 + np.cos(tilt_radians))/2
 
 
 # Create a subplot with 2 rows and 1 column

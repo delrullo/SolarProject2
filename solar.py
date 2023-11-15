@@ -109,6 +109,18 @@ timeseries['Direct'] = timeseries['B_0_h_new'] / np.sin(np.radians(timeseries['s
 # Diffuse radiation D(D) *isotropic*
 timeseries['Diffuse'] = timeseries['D_0_h'] * (1 + np.cos(tilt_radians))/2
 
+# Given reflectivity (ρ) and tilt angle (β) in degrees
+reflectivity = 0.05
+  # Assuming the tilt angle is 13 degrees
+
+# Convert tilt angle from degrees to radians
+tilt_angle = np.radians(tilt)
+
+# Calculate albedo irradiance using the modified isotropic sky model with tilt angle
+timeseries['Albedo_Irradiance'] = reflectivity * timeseries['D_ground_h'] * (1 - np.cos(tilt_angle)) / 2
+
+# Display the albedo irradiance values
+print(timeseries['Albedo_Irradiance'])
 
 # Create a subplot with 2 rows and 1 column
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 10))
@@ -174,4 +186,31 @@ ax1.plot(timeseries['D_ground_h']['2018-06-01 00:00':'2018-06-08 00:00'],
 ax1.legend(fancybox=True, shadow=True,fontsize=12, loc='best')
 ax1.set_ylabel('W/m2')
 
+# Extract the required data for February and June 2018
+feb_data = timeseries['2018-02-01':'2018-02-07']  # First week of February
+june_data = timeseries['2018-06-01':'2018-06-07']  # First week of June
+
+# Calculate global radiation as the sum of direct, diffuse, and albedo
+feb_data['Global_Radiation'] = feb_data['Direct'] + feb_data['D_ground_h'] + feb_data['Albedo_Irradiance']
+june_data['Global_Radiation'] = june_data['Direct'] + june_data['D_ground_h'] + june_data['Albedo_Irradiance']
+
+# Plotting
+plt.figure(figsize=(10, 6))
+
+plt.subplot(2, 1, 1)
+plt.plot(feb_data.index, feb_data['Global_Radiation'], label='Global Radiation (Feb)')
+plt.title('Global Radiation on PV Modules (First Week of February 2018)')
+plt.xlabel('Date')
+plt.ylabel('Global Radiation')
+plt.legend()
+
+plt.subplot(2, 1, 2)
+plt.plot(june_data.index, june_data['Global_Radiation'], label='Global Radiation (June)')
+plt.title('Global Radiation on PV Modules (First Week of June 2018)')
+plt.xlabel('Date')
+plt.ylabel('Global Radiation')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
 

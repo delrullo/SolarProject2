@@ -120,8 +120,24 @@ tilt_angle = np.radians(tilt)
 # Calculate albedo irradiance using the modified isotropic sky model with tilt angle
 timeseries['Albedo_Irradiance'] = reflectivity * timeseries['G_0_h'] * (1 - np.cos(tilt_angle)) / 2
 
-# Display the albedo irradiance values
-print(timeseries['Albedo_Irradiance'])
+# Assumed module characteristics
+efficiency = 0.185  # Efficiency (as a fraction)
+temp_coeff_power = -0.0044  # Temperature coefficient of power (%/°C, as a fraction per °C)
+STC_temperature = 25  # STC temperature in Celsius
+STC_irradiance = 1000  # Irradiance at STC in W/m²
+
+# Calculate power produced by each PV module at every hour
+timeseries['Produced_Power'] = (
+    255* (timeseries['Direct'] + timeseries['Diffuse'] + timeseries['Albedo_Irradiance']) / STC_irradiance *
+    (1 + temp_coeff_power * (data['Temp'] - STC_temperature))
+)
+
+# Total power produced by the installation (summing all PV modules)
+timeseries['Total_Produced_Power'] = 1000 * timeseries['Produced_Power']  # Assuming 1000 PV modules
+
+# Display the estimated power produced
+print(timeseries['Total_Produced_Power'])
+
 
 # Create a subplot with 2 rows and 1 column
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 10))
@@ -215,3 +231,17 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 
+
+
+# Assuming 'timeseries' DataFrame contains the 'Total_Produced_Power' column with power estimations
+
+# Plotting the total power produced by the installation
+plt.figure(figsize=(10, 6))
+plt.plot(timeseries.index, timeseries['Total_Produced_Power'], label='Total Produced Power')
+plt.title('Total Power Produced by the Installation')
+plt.xlabel('Date and Time')
+plt.ylabel('Power (W)')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()

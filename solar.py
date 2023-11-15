@@ -259,36 +259,21 @@ plt.show()
 
 #Plotting the measured production for the first week of February and the first week of June 2018.
 
-file_path = 'E:\Document\solar energy\solar energy\SolarProject2\CTS Data Aflæsning Strom.xlsx'
+file_path = 'New.xlsx'
 production_data = pd.read_excel(file_path)
 
-# Assuming the file contains a column named 'Timestamp' for timestamps and 'Production' for production data
-# Convert the 'Timestamp' column to datetime format
-production_data['Timestamp'] = pd.to_datetime(production_data['Timestamp'])
+# Assuming the 'Date' column is in the format 'month/day/2018'
+date_column_index = 0  # Change this index if the date column is at a different position
+# Set the first column (assumed to be the 'Date' column) as the DataFrame index
+production_data.set_index(production_data.columns[date_column_index], inplace=True)
 
-# Set 'Timestamp' column as the DataFrame index
-production_data.set_index('Timestamp', inplace=True)
+# Define the relevant date range (change as needed)
+start_date = '2018-02-01'
+end_date = '2018-02-08'
 
-# Extract the required data for February and June 2018
-feb_production = production_data['2018-02-01':'2018-02-08']  # First week of February
-june_production = production_data['2018-06-01':'2018-06-08']  # First week of June
+relevant_data = production_data.loc[start_date:end_date, production_data.columns[5:30]]  # Adjust column indices accordingly
 
-# Plotting production for February and June
-plt.figure(figsize=(10, 6))
+# Display or use the extracted hourly data as needed
+print(relevant_data.head())
 
-plt.subplot(2, 1, 1)
-plt.plot(feb_production.index, feb_production['Production'], label='Production (Feb)')
-plt.title('Measured Production (First Week of February 2018)')
-plt.xlabel('Date')
-plt.ylabel('Production')
-plt.legend()
 
-plt.subplot(2, 1, 2)
-plt.plot(june_production.index, june_production['Production'], label='Production (June)')
-plt.title('Measured Production (First Week of June 2018)')
-plt.xlabel('Date')
-plt.ylabel('Production')
-plt.legend()
-
-plt.tight_layout()
-plt.show()

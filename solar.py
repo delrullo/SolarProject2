@@ -117,7 +117,7 @@ reflectivity = 0.05
 tilt_angle = np.radians(tilt)
 
 # Calculate albedo irradiance using the modified isotropic sky model with tilt angle
-timeseries['Albedo_Irradiance'] = reflectivity * timeseries['D_ground_h'] * (1 - np.cos(tilt_angle)) / 2
+timeseries['Albedo_Irradiance'] = reflectivity * timeseries['G_0_h'] * (1 - np.cos(tilt_angle)) / 2
 
 # Display the albedo irradiance values
 print(timeseries['Albedo_Irradiance'])

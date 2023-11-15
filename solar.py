@@ -259,7 +259,9 @@ plt.show()
 
 #Plotting the measured production for the first week of February and the first week of June 2018.
 
+
 file_path = 'New.xlsx'
+
 production_data = pd.read_excel(file_path)
 
 # Assuming the 'Date' column is in the format 'month/day/2018'
@@ -268,12 +270,30 @@ date_column_index = 0  # Change this index if the date column is at a different 
 production_data.set_index(production_data.columns[date_column_index], inplace=True)
 
 # Define the relevant date range (change as needed)
-start_date = '2018-02-01'
-end_date = '2018-02-08'
+start_date_Feb = '2018-02-01'
+end_date_Feb = '2018-02-08'
 
-relevant_data = production_data.loc[start_date:end_date, production_data.columns[5:30]]  # Adjust column indices accordingly
+Feb_data = production_data.loc[start_date_Feb:end_date_Feb, production_data.columns[4:29]]  # Adjust column indices accordingly
 
-# Display or use the extracted hourly data as needed
-print(relevant_data.head())
+plt.figure(figsize=(10, 6))
+plt.plot(Feb_data.index, Feb_data.values)
+plt.title('Hourly Data for the First Week of February 2018')
+plt.xlabel('Date')
+plt.ylabel('Hourly Data')
+plt.xticks(rotation=45)
+plt.show()
 
+start_date_June = '2018-06-01'
+end_date_June = '2018-06-08'  # End date adjusted for the first week
+
+# Extract hourly data for the first week of June
+June_data = production_data.loc[start_date_June:end_date_June, production_data.columns[4:29]]
+
+plt.figure(figsize=(10, 6))
+plt.plot(June_data.index, June_data.values)
+plt.title('Hourly Data for the First Week of June 2018')
+plt.xlabel('Date')
+plt.ylabel('Hourly Data')
+plt.xticks(rotation=45)
+plt.show()
 

@@ -52,7 +52,9 @@ data['Temp'] = data['Temp'].interpolate(method='linear', limit_area='inside')
 # tilt representes inclination of the solar panel (in degress), orientation
 # in degress (south=0)
 tilt=13;
+tilt_radians = np.radians(tilt)
 orientation=0;
+
 # Navitas coordinates
 lat = 56.15886367 # latitude
 lon = 10.215740203 # longitude
@@ -85,7 +87,7 @@ timeseries['K_t']=0.7*np.ones(len(hours))
 # Timeseries G_zero
 timeseries['G_0_h'] = timeseries['K_t'] * timeseries['B_0_h']
 
-# Time series D_0
+# Time series D_0_h
 timeseries['D_0_h'] = timeseries['G_0_h'] * data['Cloud']/100 
 
 # Calculate global horizontal irradiance on the ground
@@ -100,6 +102,12 @@ timeseries['D_ground_h']=[x*y for x,y in zip(timeseries['G_ground_h'], timeserie
 
 # Calculate extraterrestrial irradiance
 timeseries['B_0_h_new'] = calculate_B_0_h_new(timeseries['G_0_h'], timeseries['D_0_h'])
+
+# Direct radiation D(B) 
+
+# Diffuse radiation D(D) *isotropic*
+timeseries[D_D] = timeseries[D_0_h] * (1 + np-cos(beta))/2
+
 
 # Create a subplot with 2 rows and 1 column
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 10))

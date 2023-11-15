@@ -135,8 +135,7 @@ timeseries['Produced_Power'] = (
 # Total power produced by the installation (summing all PV modules)
 timeseries['Total_Produced_Power'] = 1000 * timeseries['Produced_Power']  # Assuming 1000 PV modules
 
-# Display the estimated power produced
-print(timeseries['Total_Produced_Power'])
+
 
 
 # Create a subplot with 2 rows and 1 column
@@ -260,8 +259,7 @@ plt.show()
 
 #Plotting the measured production for the first week of February and the first week of June 2018.
 
-# Load the Excel file
-file_path = 'CTS Data Aflæsning Strom.xls'  # Replace with your file path
+file_path = 'E:\Document\solar energy\solar energy\SolarProject2\CTS Data Aflæsning Strom.xlsx'
 production_data = pd.read_excel(file_path)
 
 # Assuming the file contains a column named 'Timestamp' for timestamps and 'Production' for production data

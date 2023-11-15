@@ -104,7 +104,7 @@ timeseries['D_ground_h']=[x*y for x,y in zip(timeseries['G_ground_h'], timeserie
 timeseries['B_0_h_new'] = calculate_B_0_h_new(timeseries['G_0_h'], timeseries['D_0_h'])
 
 # Direct radiation D(B) 
-timeseries['Direct'] = timeseries['B_0_h_new']/np.sin(timeseries['solar_altitude'])
+timeseries['Direct'] = timeseries['B_0_h_new'] / np.sin(np.radians(timeseries['solar_altitude']))
 
 
 # Diffuse radiation D(D) *isotropic*

@@ -57,7 +57,6 @@ orientation=0;
 
 # Navitas coordinates
 lat = 56.15886367 # latitude
-lat_radians = np.radians(lat)
 lon = 10.215740203 # longitude
 K_t = 0.7
 

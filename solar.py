@@ -191,8 +191,8 @@ feb_data = timeseries['2018-02-01':'2018-02-07']  # First week of February
 june_data = timeseries['2018-06-01':'2018-06-07']  # First week of June
 
 # Calculate global radiation as the sum of direct, diffuse, and albedo
-feb_data['Global_Radiation'] = feb_data['Direct'] + feb_data['D_ground_h'] + feb_data['Albedo_Irradiance']
-june_data['Global_Radiation'] = june_data['Direct'] + june_data['D_ground_h'] + june_data['Albedo_Irradiance']
+feb_data['Global_Radiation'] = feb_data['Direct'] + feb_data['Diffuse'] + feb_data['Albedo_Irradiance']
+june_data['Global_Radiation'] = june_data['Direct'] + june_data['Diffuse'] + june_data['Albedo_Irradiance']
 
 # Plotting
 plt.figure(figsize=(10, 6))

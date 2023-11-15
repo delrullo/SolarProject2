@@ -57,6 +57,7 @@ orientation=0;
 
 # Navitas coordinates
 lat = 56.15886367 # latitude
+lat_radians = np.radians(lat)
 lon = 10.215740203 # longitude
 K_t = 0.7
 
@@ -104,9 +105,11 @@ timeseries['D_ground_h']=[x*y for x,y in zip(timeseries['G_ground_h'], timeserie
 timeseries['B_0_h_new'] = calculate_B_0_h_new(timeseries['G_0_h'], timeseries['D_0_h'])
 
 # Direct radiation D(B) 
+timeseries['Direct'] = timeseries['B_0_h_new']/np.sin(solar_altitude)
+
 
 # Diffuse radiation D(D) *isotropic*
-timeseries['D_D'] = timeseries['D_0_h'] * (1 + np.cos(tilt_radians))/2
+timeseries['Diffuse'] = timeseries['D_0_h'] * (1 + np.cos(tilt_radians))/2
 
 
 # Create a subplot with 2 rows and 1 column

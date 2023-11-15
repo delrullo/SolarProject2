@@ -259,7 +259,7 @@ plt.show()
 
 #Plotting the measured production for the first week of February and the first week of June 2018.
 
-file_path = 'E:\Document\solar energy\solar energy\SolarProject2\CTS Data Aflæsning Strom.xlsx'
+file_path = 'CTS_Data_Aflæsning_Strom.xlsx'
 production_data = pd.read_excel(file_path)
 
 # Assuming the file contains a column named 'Timestamp' for timestamps and 'Production' for production data

@@ -203,13 +203,15 @@ ax1.plot(timeseries['D_ground_h']['2018-06-01 00:00':'2018-06-08 00:00'],
 ax1.legend(fancybox=True, shadow=True,fontsize=12, loc='best')
 ax1.set_ylabel('W/m2')
 
+
+
 # Extract the required data for February and June 2018
-feb_data = timeseries['2018-02-01':'2018-02-07']  # First week of February
-june_data = timeseries['2018-06-01':'2018-06-07']  # First week of June
+feb_data = timeseries['2018-02-01':'2018-02-08']  # First week of February
+june_data = timeseries['2018-06-01':'2018-06-08']  # First week of June
 
 # Calculate global radiation as the sum of direct, diffuse, and albedo
-feb_data['Global_Radiation'] = feb_data['Direct'] + feb_data['Diffuse'] + feb_data['Albedo_Irradiance']
-june_data['Global_Radiation'] = june_data['Direct'] + june_data['Diffuse'] + june_data['Albedo_Irradiance']
+feb_data.loc[:, 'Global_Radiation'] = feb_data['Direct'] + feb_data['Diffuse'] + feb_data['Albedo_Irradiance']
+june_data.loc[:, 'Global_Radiation'] = june_data['Direct'] + june_data['Diffuse'] + june_data['Albedo_Irradiance']
 
 # Plotting
 plt.figure(figsize=(10, 6))
@@ -235,13 +237,60 @@ plt.show()
 
 # Assuming 'timeseries' DataFrame contains the 'Total_Produced_Power' column with power estimations
 
-# Plotting the total power produced by the installation
+
+# Plotting
 plt.figure(figsize=(10, 6))
-plt.plot(timeseries.index, timeseries['Total_Produced_Power'], label='Total Produced Power')
-plt.title('Total Power Produced by the Installation')
-plt.xlabel('Date and Time')
-plt.ylabel('Power (W)')
+
+plt.subplot(2, 1, 1)
+plt.plot(feb_data.index, feb_data['Total_Produced_Power'], label='Power Produced (Feb)')
+plt.title('Power Produced by Installation (First Week of February 2018)')
+plt.xlabel('Date')
+plt.ylabel('Power Produced (W)')
 plt.legend()
-plt.grid(True)
+
+plt.subplot(2, 1, 2)
+plt.plot(june_data.index, june_data['Total_Produced_Power'], label='Power Produced (June)')
+plt.title('Power Produced by Installation (First Week of June 2018)')
+plt.xlabel('Date')
+plt.ylabel('Power Produced (W)')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
+
+#Plotting the measured production for the first week of February and the first week of June 2018.
+
+# Load the Excel file
+file_path = 'CTS Data Aflæsning Strom.xls'  # Replace with your file path
+production_data = pd.read_excel(file_path)
+
+# Assuming the file contains a column named 'Timestamp' for timestamps and 'Production' for production data
+# Convert the 'Timestamp' column to datetime format
+production_data['Timestamp'] = pd.to_datetime(production_data['Timestamp'])
+
+# Set 'Timestamp' column as the DataFrame index
+production_data.set_index('Timestamp', inplace=True)
+
+# Extract the required data for February and June 2018
+feb_production = production_data['2018-02-01':'2018-02-08']  # First week of February
+june_production = production_data['2018-06-01':'2018-06-08']  # First week of June
+
+# Plotting production for February and June
+plt.figure(figsize=(10, 6))
+
+plt.subplot(2, 1, 1)
+plt.plot(feb_production.index, feb_production['Production'], label='Production (Feb)')
+plt.title('Measured Production (First Week of February 2018)')
+plt.xlabel('Date')
+plt.ylabel('Production')
+plt.legend()
+
+plt.subplot(2, 1, 2)
+plt.plot(june_production.index, june_production['Production'], label='Production (June)')
+plt.title('Measured Production (First Week of June 2018)')
+plt.xlabel('Date')
+plt.ylabel('Production')
+plt.legend()
+
 plt.tight_layout()
 plt.show()

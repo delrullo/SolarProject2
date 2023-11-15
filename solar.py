@@ -105,6 +105,7 @@ timeseries['B_0_h_new'] = calculate_B_0_h_new(timeseries['G_0_h'], timeseries['D
 
 # Direct radiation D(B) 
 timeseries['Direct'] = timeseries['B_0_h_new'] / np.sin(np.radians(timeseries['solar_altitude']))
+timeseries['Direct'].fillna(0, inplace=True)
 
 # Diffuse radiation D(D) *isotropic*
 timeseries['Diffuse'] = timeseries['D_0_h'] * (1 + np.cos(tilt_radians))/2

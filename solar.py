@@ -311,36 +311,7 @@ end_date = pd.to_datetime('2018-12-31 23:00:00')
 modelled_power = timeseries.loc[start_date:end_date, 'Total_Produced_Power']
 
 
-# Assuming the 'Date' column is in the format 'month/day/2018', convert it to a datetime format
-production_data['Date'] = pd.to_datetime(production_data['Date'])
 
-# Set the 'Date' column as the DataFrame index
-production_data.set_index('Date', inplace=True)
-
-# Define the relevant date range for February
-start_date_Feb = '2018-02-01'
-end_date_Feb = '2018-02-08'
-
-
-# Extract hourly data for the first week of February (columns from Column F to Column AC)
-Feb_data = production_data.loc[start_date_Feb:end_date_Feb, production_data.columns[5:29]]  # Adjust column indices accordingly
-
-# Plotting data for February as a line plot
-plt.figure(figsize=(12, 6))
-Feb_data.plot(figsize=(12, 6), legend=False)
-plt.title('Hourly Data for the First Week of February 2018')
-plt.xlabel('Date')
-plt.ylabel('Production')
-plt.xticks(rotation=45)
-plt.tight_layout()
-plt.show()
-
-# Define the date range for June
-start_date_June = '2018-06-01'
-end_date_June = '2018-06-08'
-
-# Extract hourly data for the first week of June
-June_data = production_data.loc[start_date_June:end_date_June, production_data.columns[5:29]]  # Adjust column names accordingly
 
 # Assuming 'timeseries' DataFrame contains 'Total_Produced_Power' and 'Measured_Power' columns
 

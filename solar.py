@@ -129,14 +129,14 @@ temp_coeff_power = -0.0044  # Temperature coefficient of power (%/°C, as a frac
 STC_temperature = 25  # STC temperature in Celsius
 STC_irradiance = 1000  # Irradiance at STC in W/m²
 
-# Calculate power produced by each PV module at every hour
+# Calculate power produced in [W] by each PV module at every hour
 timeseries['Produced_Power'] = (
     255* (timeseries['Direct'] + timeseries['Diffuse'] + timeseries['Albedo_Irradiance']) / STC_irradiance *
     (1 + temp_coeff_power * (data['Temp'] - STC_temperature))
 )
 
-# Total power produced by the installation (summing all PV modules)
-timeseries['Total_Produced_Power'] = 1000 * timeseries['Produced_Power']  # Assuming 1000 PV modules
+# Total power produced in [KWh] by the installation (summing all PV modules)
+timeseries['Total_Produced_Power'] = (1000 * timeseries['Produced_Power']) / 1000  # Assuming 1000 PV modules
 
 
 

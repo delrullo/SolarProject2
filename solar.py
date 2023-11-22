@@ -282,8 +282,27 @@ start_date = pd.to_datetime('2018-02-01 01:00:00')
 new_index = pd.date_range(start=start_date, periods=len(hourly_data), freq='H')
 
 # Create a new DataFrame with the desired index and 'production' column
-measured_power = pd.DataFrame({'production': hourly_data}, index=new_index)
-measured_power = measured_power.iloc[:-1]
+Measured_Power = pd.DataFrame({'production': hourly_data}, index=new_index)
+Measured_Power = Measured_Power.iloc[:-1]
+
+# Plotting data for the first week of February as a line plot
+plt.figure(figsize=(12, 6))
+Measured_Power['2018-02-01':'2018-02-08'].plot(figsize=(12, 6), legend=False)
+plt.title('Hourly Data for the First Week of February 2018 (Measured Power)')
+plt.xlabel('Date')
+plt.ylabel('Production')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+# Plotting data for the first week of June as a line plot
+plt.figure(figsize=(12, 6))
+Measured_Power['2018-06-01':'2018-06-08'].plot(figsize=(12, 6), legend=False)
+plt.title('Hourly Data for the First Week of June 2018 (Measured Power)')
+plt.xlabel('Date')
+plt.ylabel('Production')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
 
 ## Modelled power data rearranging
 start_date = pd.to_datetime('2018-02-01 01:00:00')
@@ -302,20 +321,17 @@ production_data.set_index('Date', inplace=True)
 start_date_Feb = '2018-02-01'
 end_date_Feb = '2018-02-08'
 
+
 # Extract hourly data for the first week of February (columns from Column F to Column AC)
 Feb_data = production_data.loc[start_date_Feb:end_date_Feb, production_data.columns[5:29]]  # Adjust column indices accordingly
 
-
-# Resample the data to group hourly data by day and hour
-Feb_data_by_day_hour = Feb_data.groupby([Feb_data.index.day_name(), Feb_data.index.hour]).mean().unstack()
-
-# Plotting data for February as a bar plot with days of the week on x-axis and hours as bars
+# Plotting data for February as a line plot
 plt.figure(figsize=(12, 6))
-Feb_data_by_day_hour.plot(kind='bar', stacked=True)
+Feb_data.plot(figsize=(12, 6), legend=False)
 plt.title('Hourly Data for the First Week of February 2018')
-plt.xlabel('Day of the Week')
+plt.xlabel('Date')
 plt.ylabel('Production')
-plt.xticks(range(7), ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], rotation=45)
+plt.xticks(rotation=45)
 plt.tight_layout()
 plt.show()
 
@@ -326,5 +342,26 @@ end_date_June = '2018-06-08'
 # Extract hourly data for the first week of June
 June_data = production_data.loc[start_date_June:end_date_June, production_data.columns[5:29]]  # Adjust column names accordingly
 
+# Assuming 'timeseries' DataFrame contains 'Total_Produced_Power' and 'Measured_Power' columns
+
+# Calculate the difference between modeled and measured power generation
+timeseries['Error_Hourly'] = timeseries['Total_Produced_Power'] - time['Measured_Power']
+
+# Calculate Root Mean Square Error (RMSE) for hourly generation values
+rmse_hourly = np.sqrt(np.mean(timeseries['Error_Hourly'] ** 2))
+print(f"RMSE for hourly generation values: {rmse_hourly:.2f} W")
+# Resample data to daily, weekly, and monthly frequency
+daily_errors = timeseries['Error_Hourly'].resample('D').sum()  # Resample to daily
+weekly_errors = timeseries['Error_Hourly'].resample('W').sum()  # Resample to weekly
+monthly_errors = timeseries['Error_Hourly'].resample('M').sum()  # Resample to monthly
+
+# Calculate Root Mean Square Error (RMSE) for aggregated generation values
+rmse_daily = np.sqrt(np.mean(daily_errors ** 2))
+rmse_weekly = np.sqrt(np.mean(weekly_errors ** 2))
+rmse_monthly = np.sqrt(np.mean(monthly_errors ** 2))
+
+print(f"RMSE for daily generation values: {rmse_daily:.2f} W")
+print(f"RMSE for weekly generation values: {rmse_weekly:.2f} W")
+print(f"RMSE for monthly generation values: {rmse_monthly:.2f} W")
 
 

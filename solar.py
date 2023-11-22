@@ -328,8 +328,8 @@ rmse_daily = np.sqrt(np.mean(daily_errors ** 2))
 rmse_weekly = np.sqrt(np.mean(weekly_errors ** 2))
 rmse_monthly = np.sqrt(np.mean(monthly_errors ** 2))
 
-print(f"RMSE for daily generation values: {rmse_daily:.2f} KW")
-print(f"RMSE for weekly generation values: {rmse_weekly:.2f} KW")
-print(f"RMSE for monthly generation values: {rmse_monthly:.2f} KW")
+print(f"RMSE for daily generation values: {rmse_daily:.2f} KWh")
+print(f"RMSE for weekly generation values: {rmse_weekly:.2f} KWh")
+print(f"RMSE for monthly generation values: {rmse_monthly:.2f} KWh")
 
 

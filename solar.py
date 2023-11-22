@@ -21,6 +21,7 @@ def import_data(dataset):
     return df
 
 
+
     # Data import and interpolation for missing data
 # Load the CSV file using the import_data function
 data = import_data('weather_data.csv')
@@ -140,23 +141,23 @@ timeseries['Total_Produced_Power'] = (1000 * timeseries['Produced_Power']) / 100
 
 
 
-
+    ## Plot of Global radiation on horizontal surface G(0)
 # Create a subplot with 2 rows and 1 column
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 10))
 
 # Plotting G_0_h time series for the first week of June
 ax1.plot(timeseries['G_0_h']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='green')
-ax1.set_title('G_0_h Time Series (June 1st - June 8th)')
+ax1.set_title('Global irradiation horizontal surface (June 1st - June 8th)')
 ax1.set_xlabel('Time')
-ax1.set_ylabel('G_0_h')
+ax1.set_ylabel(r'$\mathrm{G(0) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
 ax1.legend()
 ax1.grid(True)
 
 # Plotting G_0_h time series for the first week of February
 ax2.plot(timeseries['G_0_h']['2018-02-01 00:00':'2018-02-08 00:00'], label='G_0_h (February)', color='blue')
-ax2.set_title('G_0_h Time Series (Feb 1st - Feb 8th)')
+ax2.set_title('Global irradiation horizontal surface (Feb 1st - Feb 8th)')
 ax2.set_xlabel('Time')
-ax2.set_ylabel('G_0_h')
+ax2.set_ylabel(r'$\mathrm{G(0) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
 ax2.legend()
 ax2.grid(True)
 

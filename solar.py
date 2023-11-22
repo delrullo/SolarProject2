@@ -143,22 +143,22 @@ timeseries['Total_Produced_Power'] = (1000 * timeseries['Produced_Power']) / 100
 
     ## Plot of Global radiation on horizontal surface G(0)
 # Create a subplot with 2 rows and 1 column
-fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 10))
+fig, (ax2, ax1) = plt.subplots(2, 1, figsize=(12, 10))
 
 # Plotting G_0_h time series for the first week of June
 ax1.plot(timeseries['G_0_h']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='green')
-ax1.set_title('Global irradiation horizontal surface (June 1st - June 8th)')
+ax1.set_title('Global irradiation horizontal surface (June 1st - June 7th)')
 ax1.set_xlabel('Time')
 ax1.set_ylabel(r'$\mathrm{G(0) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
-ax1.legend()
+#ax1.legend()
 ax1.grid(True)
 
 # Plotting G_0_h time series for the first week of February
 ax2.plot(timeseries['G_0_h']['2018-02-01 00:00':'2018-02-08 00:00'], label='G_0_h (February)', color='blue')
-ax2.set_title('Global irradiation horizontal surface (Feb 1st - Feb 8th)')
+ax2.set_title('Global irradiation horizontal surface (Feb 1st - Feb 7th)')
 ax2.set_xlabel('Time')
 ax2.set_ylabel(r'$\mathrm{G(0) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
-ax2.legend()
+#ax2.legend()
 ax2.grid(True)
 
 # Adjust layout for better spacing
@@ -170,9 +170,9 @@ plt.show()
 # Create a subplot with 2 rows and 1 column
 fig, (ax3, ax4) = plt.subplots(2, 1, figsize=(12, 10))
 
-# Plotting diffuse fraction time series for the first week of July
-ax3.plot(timeseries['F']['2018-07-01 00:00':'2018-07-08 00:00'], label='Diffuse Fraction (July)', color='orange')
-ax3.set_title('Diffuse Fraction Time Series (July 1st - July 8th)')
+# Plotting diffuse fraction time series for the first week of June
+ax3.plot(timeseries['F']['2018-06-01 00:00':'2018-06-08 00:00'], label='Diffuse Fraction (June)', color='orange')
+ax3.set_title('Diffuse Fraction Time Series (June 1st - June 7th)')
 ax3.set_xlabel('Time')
 ax3.set_ylabel('Diffuse Fraction')
 ax3.legend()
@@ -180,7 +180,7 @@ ax3.grid(True)
 
 # Plotting diffuse fraction time series for the first week of February
 ax4.plot(timeseries['F']['2018-02-01 00:00':'2018-02-08 00:00'], label='Diffuse Fraction (February)', color='purple')
-ax4.set_title('Diffuse Fraction Time Series (Feb 1st - Feb 8th)')
+ax4.set_title('Diffuse Fraction Time Series (Feb 1st - Feb 7th)')
 ax4.set_xlabel('Time')
 ax4.set_ylabel('Diffuse Fraction')
 ax4.legend()
@@ -216,22 +216,22 @@ june_data = timeseries['2018-06-01':'2018-06-08']  # First week of June
 feb_data.loc[:, 'Global_Radiation'] = feb_data['Direct'] + feb_data['Diffuse'] + feb_data['Albedo_Irradiance']
 june_data.loc[:, 'Global_Radiation'] = june_data['Direct'] + june_data['Diffuse'] + june_data['Albedo_Irradiance']
 
-# Plotting
+    ## Plotting Global Radiation
 plt.figure(figsize=(10, 6))
 
 plt.subplot(2, 1, 1)
 plt.plot(feb_data.index, feb_data['Global_Radiation'], label='Global Radiation (Feb)')
 plt.title('Global Radiation on PV Modules (First Week of February 2018)')
 plt.xlabel('Date')
-plt.ylabel('Global Radiation')
-plt.legend()
+plt.ylabel(r'$\mathrm{G(\beta,\alpha) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
+#plt.legend()
 
 plt.subplot(2, 1, 2)
 plt.plot(june_data.index, june_data['Global_Radiation'], label='Global Radiation (June)')
 plt.title('Global Radiation on PV Modules (First Week of June 2018)')
 plt.xlabel('Date')
-plt.ylabel('Global Radiation')
-plt.legend()
+plt.ylabel(r'$\mathrm{G(\beta,\alpha) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
+#plt.legend()
 
 plt.tight_layout()
 plt.show()

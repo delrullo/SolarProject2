@@ -287,17 +287,18 @@ end_date_Feb = '2018-02-08'
 Feb_data = production_data.loc[start_date_Feb:end_date_Feb, production_data.columns[5:29]]  # Adjust column indices accordingly
 
 
-# Transpose the DataFrame for plotting
-Feb_data_transposed = Feb_data.T
+# Resample the data to group hourly data by day and hour
+Feb_data_by_day_hour = Feb_data.groupby([Feb_data.index.day_name(), Feb_data.index.hour]).mean().unstack()
 
-# Plotting data for February as a discrete bar plot
+# Plotting data for February as a bar plot with days of the week on x-axis and hours as bars
 plt.figure(figsize=(12, 6))
-Feb_data_transposed.plot(kind='bar', stacked=True)
+Feb_data_by_day_hour.plot(kind='bar', stacked=True)
 plt.title('Hourly Data for the First Week of February 2018')
-plt.xlabel('Hour')
+plt.xlabel('Day of the Week')
 plt.ylabel('Production')
-plt.xticks(rotation=45)
+plt.xticks(range(7), ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], rotation=45)
 plt.tight_layout()
+plt.show()
 
 # Define the date range for June
 start_date_June = '2018-06-01'
@@ -306,13 +307,5 @@ end_date_June = '2018-06-08'
 # Extract hourly data for the first week of June
 June_data = production_data.loc[start_date_June:end_date_June, production_data.columns[5:29]]  # Adjust column names accordingly
 
-# Plotting data for June
-plt.figure(figsize=(10, 6))
-plt.bar(Feb_data.index, Feb_data.values.flatten(), width=0.2)  # Adjust width as needed
-plt.title('Hourly Data for the First Week of February 2018')
-plt.xlabel('Date')
-plt.ylabel('Hourly Data')
-plt.xticks(rotation=45)
-plt.tight_layout()
-plt.show()
+
 

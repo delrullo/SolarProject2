@@ -308,7 +308,7 @@ plt.show()
 start_date = pd.to_datetime('2018-02-01 01:00:00')
 end_date = pd.to_datetime('2018-12-31 23:00:00')
 
-modelled_power = timeseries.loc[start_date:end_date, 'Total_Produced_Power']
+Modelled_Power = timeseries.loc[start_date:end_date, 'Total_Produced_Power']
 
 
 
@@ -316,11 +316,11 @@ modelled_power = timeseries.loc[start_date:end_date, 'Total_Produced_Power']
 # Assuming 'timeseries' DataFrame contains 'Total_Produced_Power' and 'Measured_Power' columns
 
 # Calculate the difference between modeled and measured power generation
-timeseries['Error_Hourly'] = timeseries['Total_Produced_Power'] - time['Measured_Power']
+timeseries['Error_Hourly'] = timeseries['Total_Produced_Power'] - Measured_Power['production']
 
 # Calculate Root Mean Square Error (RMSE) for hourly generation values
 rmse_hourly = np.sqrt(np.mean(timeseries['Error_Hourly'] ** 2))
-print(f"RMSE for hourly generation values: {rmse_hourly:.2f} W")
+print(f"RMSE for hourly generation values: {rmse_hourly:.2f} KW")
 # Resample data to daily, weekly, and monthly frequency
 daily_errors = timeseries['Error_Hourly'].resample('D').sum()  # Resample to daily
 weekly_errors = timeseries['Error_Hourly'].resample('W').sum()  # Resample to weekly
@@ -331,8 +331,8 @@ rmse_daily = np.sqrt(np.mean(daily_errors ** 2))
 rmse_weekly = np.sqrt(np.mean(weekly_errors ** 2))
 rmse_monthly = np.sqrt(np.mean(monthly_errors ** 2))
 
-print(f"RMSE for daily generation values: {rmse_daily:.2f} W")
-print(f"RMSE for weekly generation values: {rmse_weekly:.2f} W")
-print(f"RMSE for monthly generation values: {rmse_monthly:.2f} W")
+print(f"RMSE for daily generation values: {rmse_daily:.2f} KW")
+print(f"RMSE for weekly generation values: {rmse_weekly:.2f} KW")
+print(f"RMSE for monthly generation values: {rmse_monthly:.2f} KW")
 
 

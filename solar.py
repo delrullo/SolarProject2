@@ -31,8 +31,11 @@ desired_length = 8290
 # Truncate the DataFrame to the desired length
 data = data.iloc[:desired_length]
 
-# Round down the timestamps to the nearest hour
-data.index = pd.to_datetime(data.index).ceil('H')
+# # Round down the timestamps to the nearest hour
+# data.index = pd.to_datetime(data.index).ceil('H')
+
+# Round the timestamps to the nearest hour
+data.index = pd.to_datetime(data.index).round('H')
 
 # Create a complete hourly index
 complete_index = pd.date_range(start=data.index.min(), end=data.index.max(), freq='1H')

@@ -268,10 +268,28 @@ file_path = 'New.xlsx'
 
 # Load the production data from the Excel file
 production_data = pd.read_excel(file_path)
-print(production_data.columns)
 
-# Display the first few rows or check the data information
-print(production_data.head())  # Check the loaded data
+
+## Historical data lubrication (rearranging)
+# Extract relevant columns and reshape the data
+hourly_data = production_data.iloc[:, 5:30].values.reshape(-1)
+
+# Define the start date
+start_date = pd.to_datetime('2018-02-01 01:00:00')
+
+# Create a new datetime index with hourly frequency
+new_index = pd.date_range(start=start_date, periods=len(hourly_data), freq='H')
+
+# Create a new DataFrame with the desired index and 'production' column
+measured_power = pd.DataFrame({'production': hourly_data}, index=new_index)
+measured_power = measured_power.iloc[:-1]
+
+## Modelled power data rearranging
+start_date = pd.to_datetime('2018-02-01 01:00:00')
+end_date = pd.to_datetime('2018-12-31 23:00:00')
+
+modelled_power = timeseries.loc[start_date:end_date, 'Total_Produced_Power']
+
 
 # Assuming the 'Date' column is in the format 'month/day/2018', convert it to a datetime format
 production_data['Date'] = pd.to_datetime(production_data['Date'])

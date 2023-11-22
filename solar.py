@@ -175,7 +175,7 @@ ax3.plot(timeseries['F']['2018-06-01 00:00':'2018-06-08 00:00'], label='Diffuse 
 ax3.set_title('Diffuse Fraction Time Series (June 1st - June 7th)')
 ax3.set_xlabel('Time')
 ax3.set_ylabel('Diffuse Fraction')
-ax3.legend()
+#ax3.legend()
 ax3.grid(True)
 
 # Plotting diffuse fraction time series for the first week of February
@@ -183,7 +183,7 @@ ax4.plot(timeseries['F']['2018-02-01 00:00':'2018-02-08 00:00'], label='Diffuse 
 ax4.set_title('Diffuse Fraction Time Series (Feb 1st - Feb 7th)')
 ax4.set_xlabel('Time')
 ax4.set_ylabel('Diffuse Fraction')
-ax4.legend()
+#ax4.legend()
 ax4.grid(True)
 
 # Adjust layout for better spacing
@@ -241,21 +241,21 @@ plt.show()
 # Assuming 'timeseries' DataFrame contains the 'Total_Produced_Power' column with power estimations
 
 
-# Plotting
+    ## Plotting Total Power Produced
 plt.figure(figsize=(10, 6))
 
 plt.subplot(2, 1, 1)
 plt.plot(feb_data.index, feb_data['Total_Produced_Power'], label='Power Produced (Feb)')
-plt.title('Power Produced by Installation (First Week of February 2018)')
-plt.xlabel('Date')
-plt.ylabel('Power Produced (W)')
+plt.title('Power Produced by Installation (Feb 1st - Feb 7th)')
+plt.xlabel('Time [h]')
+plt.ylabel('Power Produced (KWh)')
 plt.legend()
 
 plt.subplot(2, 1, 2)
 plt.plot(june_data.index, june_data['Total_Produced_Power'], label='Power Produced (June)')
-plt.title('Power Produced by Installation (First Week of June 2018)')
-plt.xlabel('Date')
-plt.ylabel('Power Produced (W)')
+plt.title('Power Produced by Installation (June 1st - June 7th)')
+plt.xlabel('Time [h]')
+plt.ylabel('Power Produced (KWh)')
 plt.legend()
 
 plt.tight_layout()

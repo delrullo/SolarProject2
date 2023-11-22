@@ -281,25 +281,28 @@ new_index = pd.date_range(start=start_date, periods=len(hourly_data), freq='H')
 # Create a new DataFrame with the desired index and 'production' column
 Measured_Power = pd.DataFrame({'production': hourly_data}, index=new_index)
 Measured_Power = Measured_Power.iloc[:-1]
+# Plotting data for the first week of February and the first week of June as line plots
+fig, axs = plt.subplots(2, 1, figsize=(12, 12))
 
-# Plotting data for the first week of February as a line plot
-plt.figure(figsize=(12, 6))
-Measured_Power['2018-02-01':'2018-02-08'].plot(figsize=(12, 6), legend=False)
-plt.title('Measured Power production (Feb 1st - Feb 7th)')
-plt.xlabel('t [h]')
-plt.ylabel(r'$\mathrm{P_{PV} \; [KWh]}$',fontsize=14)
-plt.xticks(rotation=45)
+# Plotting data for the first week of February
+axs[0].plot(Measured_Power['2018-02-01':'2018-02-08'], label='Measured Power (Feb)', color='blue')
+axs[0].set_title('Measured Power production (Feb 1st - Feb 7th)')
+axs[0].set_xlabel('Time')
+axs[0].set_ylabel('Power (kW)')
+axs[0].legend()
+axs[0].grid(True)
+
+# Plotting data for the first week of June
+axs[1].plot(Measured_Power['2018-06-01':'2018-06-08'], label='Measured Power (June)', color='green')
+axs[1].set_title('Measured Power production (June 1st - June 7th)')
+axs[1].set_xlabel('Time')
+axs[1].set_ylabel('Power (kW)')
+axs[1].legend()
+axs[1].grid(True)
+
 plt.tight_layout()
 plt.show()
-# Plotting data for the first week of June as a line plot
-plt.figure(figsize=(12, 6))
-Measured_Power['2018-06-01':'2018-06-08'].plot(figsize=(12, 6), legend=False)
-plt.title('Measured Power production (June 1st - June 7th)')
-plt.xlabel('t [h]')
-plt.ylabel(r'$\mathrm{P_{PV} \; [KWh]}$',fontsize=14)
-plt.xticks(rotation=45)
-plt.tight_layout()
-plt.show()
+
 
 ## Modelled power data rearranging
 start_date = pd.to_datetime('2018-02-01 01:00:00')

@@ -454,6 +454,34 @@ def Gaussian_tilt_orientation(inclination_mean=0, inclination_sd=0, azimuth_mean
     return weights, inclinations, azimuths
     
 
-    
+# def RMSE(a,b)
+# # Hourly
+#     # Calculate mean squared error
+#     se = mean_squared_error(y_true, y_pred)
+
+#     # Calculate root mean square error (RMSE)
+#     rmse_H = np.sqrt(mse)
    
+# # Daily aggregation
+#     # Calculate mean squared error
+#     se = mean_squared_error(y_true2, y_pred2)
+
+#     # Calculate root mean square error (RMSE)
+#     rmse_D = np.sqrt(mse)    
+    
+# # Weekly aggregation
+#     # Calculate mean squared error
+#     se = mean_squared_error(y_true3, y_pred3)
+
+#     # Calculate root mean square error (RMSE)
+#     rmse_W = np.sqrt(mse)
+    
+# # Weekly aggregation
+#     # Calculate mean squared error
+#     se = mean_squared_error(y_true3, y_pred3)
+
+#     # Calculate root mean square error (RMSE)
+#     rmse_M = np.sqrt(mse)
+    
+#    return rmse_H, rmse_D, rmse_W, rmse_M
 

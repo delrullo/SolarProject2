@@ -12,8 +12,8 @@ from solarfun import (calculate_B_0_horizontal,
                       calculate_diffuse_fraction,
                       calculate_incident_angle,
                       solar_altitude,
-                      calculate_B_0_h_new,
-                      B_0_horizontal)
+                      calculate_B_0_h_new)
+                      
 
 def import_data(dataset):
     df = pd.read_csv(dataset,sep=';',index_col='TimeStamp')
@@ -132,16 +132,10 @@ timeseries['Albedo_Irradiance'] = reflectivity * timeseries['G_ground_h'] * (1 -
 timeseries['Global'] = timeseries['Direct'] + timeseries['Diffuse'] + timeseries['Albedo_Irradiance']
 
 ## Plot testing
-fig, ax1 = plt.subplots()
-ax1.plot(timeseries['Direct']['2018-06-01 00:00':'2018-06-08 00:00'], label='Direct (June)', color='green')
-plt.show()
-
-fig, ax2 = plt.subplots()
-ax2.plot(timeseries['Diffuse']['2018-06-01 00:00':'2018-06-08 00:00'], label='Diffuse (June)', color='green')
-plt.show()
-
-fig, ax3 = plt.subplots()
-ax3.plot(timeseries['Albedo_Irradiance']['2018-06-01 00:00':'2018-06-08 00:00'], label='Albedo_Irradiance (June)', color='green')
+plt.figure(figsize=(12, 12))
+plt.plot(timeseries['Direct']['2018-06-01 00:00':'2018-06-08 00:00'], label='Direct (June)', color='green')
+plt.plot(timeseries['Diffuse']['2018-06-01 00:00':'2018-06-08 00:00'], label='Diffuse (June)', color='blue')
+plt.plot(timeseries['Albedo_Irradiance']['2018-06-01 00:00':'2018-06-08 00:00'], label='Albedo_Irradiance (June)', color='red')
 plt.show()
     
 ##
@@ -169,23 +163,27 @@ timeseries['Total_Produced_Power'] = (1000 * timeseries['Produced_Power']) / 100
 
     ## Plot of Global radiation on horizontal surface G(0)
 # Create a subplot with 2 rows and 1 column
-fig, (ax2, ax1) = plt.subplots(2, 1, figsize=(12, 10))
+plt.figure(figsize=(12, 12))
 
+plt.subplot(2, 1, 1)
 # Plotting G_0_h time series for the first week of June
-ax1.plot(timeseries['G_ground_h']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='green')
-ax1.set_title('Global irradiation horizontal surface (June 1st - June 7th)')
-ax1.set_xlabel('t [h]')
-ax1.set_ylabel(r'$\mathrm{G(0) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
-#ax1.legend()
-ax1.grid(True)
+plt.plot(timeseries['G_ground_h']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='blue')
+plt.plot(timeseries['B_0_h_new']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='yellow')
+plt.plot(timeseries['D_0_h']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='purple')
+plt.title('Global irradiation horizontal surface (June 1st - June 7th)')
+plt.ylabel(r'$\mathrm{G(0) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
+plt.xticks(fontsize=12)
+plt.grid(True)
 
+plt.subplot(2, 1, 2)
 # Plotting G_0_h time series for the first week of February
-ax2.plot(timeseries['G_ground_h']['2018-02-01 00:00':'2018-02-08 00:00'], label='G_0_h (February)', color='blue')
-ax2.set_title('Global irradiation horizontal surface (Feb 1st - Feb 7th)')
-ax2.set_xlabel('t [h]')
-ax2.set_ylabel(r'$\mathrm{G(0) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
-#ax2.legend()
-ax2.grid(True)
+plt.plot(timeseries['G_ground_h']['2018-02-01 00:00':'2018-02-08 00:00'], label='G_0_h (February)', color='blue')
+plt.plot(timeseries['G_ground_h']['2018-02-01 00:00':'2018-02-08 00:00'], label='G_0_h (February)', color='blue')
+
+plt.title('Global irradiation horizontal surface (Feb 1st - Feb 7th)')
+plt.ylabel(r'$\mathrm{G(0) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
+plt.xticks(fontsize=12)
+plt.grid(True)
 
 # Adjust layout for better spacing
 plt.tight_layout()
@@ -194,23 +192,23 @@ plt.tight_layout()
 plt.show()
 
 # Create a subplot with 2 rows and 1 column
-fig, (ax3, ax4) = plt.subplots(2, 1, figsize=(12, 10))
+plt.figure(figsize=(12, 12))
 
 # Plotting diffuse fraction time series for the first week of June
-ax3.plot(timeseries['F']['2018-06-01 00:00':'2018-06-08 00:00'], label='Diffuse Fraction (June)', color='orange')
-ax3.set_title('Diffuse Fraction Time Series (June 1st - June 7th)')
-ax3.set_xlabel('t [h]')
-ax3.set_ylabel('Diffuse Fraction')
-#ax3.legend()
-ax3.grid(True)
+plt.subplot(2, 1, 1)
+plt.plot(timeseries['F']['2018-06-01 00:00':'2018-06-08 00:00'], label='Diffuse Fraction (June)', color='orange')
+plt.title('Diffuse Fraction Time Series (June 1st - June 7th)')
+plt.xticks(fontsize=12)
+plt.ylabel('Diffuse Fraction')
+plt.grid(True)
 
 # Plotting diffuse fraction time series for the first week of February
-ax4.plot(timeseries['F']['2018-02-01 00:00':'2018-02-08 00:00'], label='Diffuse Fraction (February)', color='purple')
-ax4.set_title('Diffuse Fraction Time Series (Feb 1st - Feb 7th)')
-ax4.set_xlabel('t [h]')
-ax4.set_ylabel('Diffuse Fraction')
-#ax4.legend()
-ax4.grid(True)
+plt.subplot(2, 1, 2)
+plt.plot(timeseries['F']['2018-02-01 00:00':'2018-02-08 00:00'], label='Diffuse Fraction (February)', color='purple')
+plt.title('Diffuse Fraction Time Series (Feb 1st - Feb 7th)')
+plt.xticks(fontsize=12)
+plt.ylabel('Diffuse Fraction')
+plt.grid(True)
 
 # Adjust layout for better spacing
 plt.tight_layout()
@@ -243,21 +241,21 @@ feb_data.loc[:, 'Global_Radiation'] = feb_data['Direct'] + feb_data['Diffuse'] +
 june_data.loc[:, 'Global_Radiation'] = june_data['Direct'] + june_data['Diffuse'] + june_data['Albedo_Irradiance']
 
     ## Plotting Global Radiation
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(12, 12))
 
 plt.subplot(2, 1, 1)
 plt.plot(feb_data.index, feb_data['Global_Radiation'], label='Global Radiation (Feb)')
 plt.title('Global Radiation on PV Modules (Feb 1st - Feb 7th)')
-plt.xlabel('t [h]')
 plt.ylabel(r'$\mathrm{G(\beta,\alpha) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
-#plt.legend()
+plt.xticks(fontsize=12)
+plt.grid(True)
 
 plt.subplot(2, 1, 2)
 plt.plot(june_data.index, june_data['Global_Radiation'], label='Global Radiation (June)')
 plt.title('Global Radiation on PV Modules (June 1st - June 7th)')
-plt.xlabel('t [h]')
 plt.ylabel(r'$\mathrm{G(\beta,\alpha) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
-#plt.legend()
+plt.xticks(fontsize=12)
+plt.grid(True)
 
 plt.tight_layout()
 plt.show()
@@ -265,21 +263,23 @@ plt.show()
 
 
     ## Plotting Total Power Produced
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(12, 12))
 
 plt.subplot(2, 1, 1)
 plt.plot(feb_data.index, feb_data['Total_Produced_Power'], label='Power Produced (Feb)')
 plt.title('Modelled Power production (Feb 1st - Feb 7th)')
-plt.xlabel('t [h]')
+plt.xticks(fontsize=12)
 plt.ylabel(r'$\mathrm{P_{PV} \; [KWh]}$',fontsize=14)
+plt.grid(True)
 plt.legend()
 
 plt.subplot(2, 1, 2)
 plt.plot(june_data.index, june_data['Total_Produced_Power'], label='Power Produced (June)')
 plt.title('Modelled Power production (June 1st - June 7th)')
-plt.xlabel('t [h]')
+plt.xticks(fontsize=12)
 plt.ylabel(r'$\mathrm{P_{PV} \; [KWh]}$',fontsize=14)
 plt.legend()
+plt.grid(True)
 
 plt.tight_layout()
 plt.show()
@@ -307,26 +307,58 @@ new_index = pd.date_range(start=start_date, periods=len(hourly_data), freq='H')
 # Create a new DataFrame with the desired index and 'production' column
 Measured_Power = pd.DataFrame({'production': hourly_data}, index=new_index)
 Measured_Power = Measured_Power.iloc[:-1]
+
 # Plotting data for the first week of February and the first week of June as line plots
-fig, axs = plt.subplots(2, 1, figsize=(12, 12))
+plt.figure(figsize=(12, 12))
+
+plt.subplot(2, 1, 1)
 
 # Plotting data for the first week of February
-axs[0].plot(Measured_Power['2018-02-01':'2018-02-08'], label='Measured Power (Feb)', color='blue')
-axs[0].set_title('Measured Power production (Feb 1st - Feb 7th)')
-axs[0].set_xlabel('Time')
-axs[0].set_ylabel('Power (kW)')
-axs[0].legend()
-axs[0].grid(True)
+plt.plot(Measured_Power['2018-02-01':'2018-02-08'], label='Measured Power (Feb)', color='blue')
+plt.title('Measured Power production (Feb 1st - Feb 7th)')
+plt.xticks(fontsize=12)
+plt.ylabel('Power (kW)')
+plt.legend()
+plt.grid(True)
 
 # Plotting data for the first week of June
-axs[1].plot(Measured_Power['2018-06-01':'2018-06-08'], label='Measured Power (June)', color='green')
-axs[1].set_title('Measured Power production (June 1st - June 7th)')
-axs[1].set_xlabel('Time')
-axs[1].set_ylabel('Power (kW)')
-axs[1].legend()
-axs[1].grid(True)
-
+plt.subplot(2, 1, 2)
+plt.plot(Measured_Power['2018-06-01':'2018-06-08'], label='Measured Power (June)', color='green')
+plt.title('Measured Power production (June 1st - June 7th)')
+plt.ylabel('Power (kW)')
+plt.legend()
+plt.grid(True)
+plt.xticks(fontsize=12)
 plt.tight_layout()
+
+plt.show()
+
+
+## Comparison plots
+plt.figure(figsize=(12, 12))
+# February
+    # Measure feb
+plt.plot(Measured_Power['2018-02-01':'2018-02-08'], label='Measured Power (Feb)', color='green')
+plt.plot(feb_data.index, feb_data['Total_Produced_Power'], label='Power Produced (Feb)')
+plt.title('Power production (Feb 1st - Feb 7th)')
+plt.xticks(fontsize=12)
+plt.ylabel('Power (kW)')
+plt.legend()
+plt.grid(True)
+    
+plt.show()
+
+# June
+plt.figure(figsize=(12, 12))
+
+plt.plot(Measured_Power['2018-06-01':'2018-06-08'], label='Measured Power (June)', color='green')
+plt.plot(june_data.index, june_data['Total_Produced_Power'], label='Power Produced (June)')
+plt.title('Power production (June 1st - June 7th)')
+plt.xticks(fontsize=12)
+plt.ylabel(r'$\mathrm{P_{PV} \; [KWh]}$',fontsize=14)
+plt.legend()
+plt.grid(True)
+
 plt.show()
 
 

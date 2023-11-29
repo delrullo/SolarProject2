@@ -12,7 +12,8 @@ from solarfun import (calculate_B_0_horizontal,
                       calculate_diffuse_fraction,
                       calculate_incident_angle,
                       solar_altitude,
-                      calculate_B_0_h_new)
+                      calculate_B_0_h_new,
+                      B_0_horizontal)
 
 def import_data(dataset):
     df = pd.read_csv(dataset,sep=';',index_col='TimeStamp')
@@ -81,31 +82,32 @@ timeseries = pd.DataFrame(
                         'B_tilted', 'D_tilted', 'R_tilted', 'G_tilted'], 
                 name = 'names')
             )
-
+ ## Irradiance on horizontal
 # Calculate extraterrestrial irradiance
 timeseries['B_0_h'] = calculate_B_0_horizontal(hours, hour_0, lon, lat)  
 
 # Clearness index is assumed to be equal to 0.7 at every hour
 timeseries['K_t']=0.7*np.ones(len(hours))  
 
-# Timeseries G_zero
-timeseries['G_0_h'] = timeseries['K_t'] * timeseries['B_0_h']
-
-# Time series D_0_h
-timeseries['D_0_h'] = timeseries['G_0_h'] * data['Cloud']/100 
-
 # Calculate global horizontal irradiance on the ground
 [timeseries['G_ground_h'], timeseries['solar_altitude']] = calculate_G_ground_horizontal(hours, hour_0, lon, lat, timeseries['K_t'])
+# Timeseries G_zero
+#timeseries['G_0_h'] = timeseries['K_t'] * timeseries['B_0_h']
 
-# Calculate the use fraction
+
+# Time series Diffuse irradiance on horizontal
+timeseries['D_0_h'] = timeseries['G_ground_h'] * data['Cloud']/100 
+
+# Calculate direct irradiance on horizontal
+timeseries['B_0_h_new'] = timeseries['G_ground_h'] - timeseries['D_0_h']
+
+
+# Calculate the diffuse fraction
 timeseries['F'] = calculate_diffuse_fraction(hours, hour_0, lon, lat, timeseries['K_t'])
 
 # Calculate direct and diffuse irradiance on the horizontal surface
 timeseries['B_ground_h']=[x*(1-y) for x,y in zip(timeseries['G_ground_h'], timeseries['F'])]
 timeseries['D_ground_h']=[x*y for x,y in zip(timeseries['G_ground_h'], timeseries['F'])]
-
-# Calculate extraterrestrial irradiance
-timeseries['B_0_h_new'] = calculate_B_0_h_new(timeseries['G_0_h'], timeseries['D_0_h'])
 
 # Direct radiation D(B) 
 timeseries['Direct'] = timeseries['B_0_h_new'] / np.sin(np.radians(timeseries['solar_altitude']))
@@ -122,10 +124,25 @@ reflectivity = 0.05
 tilt_angle = np.radians(tilt)
 
 # Calculate albedo irradiance using the modified isotropic sky model with tilt angle
-timeseries['Albedo_Irradiance'] = reflectivity * timeseries['G_0_h'] * (1 - np.cos(tilt_angle)) / 2
+timeseries['Albedo_Irradiance'] = reflectivity * timeseries['G_ground_h'] * (1 - np.cos(tilt_angle)) / 2
 
 # Global irradiation G(Beta,alpha)
 timeseries['Global'] = timeseries['Direct'] + timeseries['Diffuse'] + timeseries['Albedo_Irradiance']
+
+## Plot testing
+fig, ax1 = plt.subplots()
+ax1.plot(timeseries['Direct']['2018-06-01 00:00':'2018-06-08 00:00'], label='Direct (June)', color='green')
+plt.show()
+
+fig, ax2 = plt.subplots()
+ax2.plot(timeseries['Diffuse']['2018-06-01 00:00':'2018-06-08 00:00'], label='Diffuse (June)', color='green')
+plt.show()
+
+fig, ax3 = plt.subplots()
+ax3.plot(timeseries['Albedo_Irradiance']['2018-06-01 00:00':'2018-06-08 00:00'], label='Albedo_Irradiance (June)', color='green')
+plt.show()
+    
+##
 
 # Module characteristics
 efficiency = 0.185  # Efficiency (as a fraction)
@@ -153,7 +170,7 @@ timeseries['Total_Produced_Power'] = (1000 * timeseries['Produced_Power']) / 100
 fig, (ax2, ax1) = plt.subplots(2, 1, figsize=(12, 10))
 
 # Plotting G_0_h time series for the first week of June
-ax1.plot(timeseries['G_0_h']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='green')
+ax1.plot(timeseries['G_ground_h']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='green')
 ax1.set_title('Global irradiation horizontal surface (June 1st - June 7th)')
 ax1.set_xlabel('t [h]')
 ax1.set_ylabel(r'$\mathrm{G(0) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
@@ -161,7 +178,7 @@ ax1.set_ylabel(r'$\mathrm{G(0) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
 ax1.grid(True)
 
 # Plotting G_0_h time series for the first week of February
-ax2.plot(timeseries['G_0_h']['2018-02-01 00:00':'2018-02-08 00:00'], label='G_0_h (February)', color='blue')
+ax2.plot(timeseries['G_ground_h']['2018-02-01 00:00':'2018-02-08 00:00'], label='G_0_h (February)', color='blue')
 ax2.set_title('Global irradiation horizontal surface (Feb 1st - Feb 7th)')
 ax2.set_xlabel('t [h]')
 ax2.set_ylabel(r'$\mathrm{G(0) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)

@@ -167,19 +167,21 @@ plt.figure(figsize=(12, 12))
 
 plt.subplot(2, 1, 1)
 # Plotting G_0_h time series for the first week of June
-plt.plot(timeseries['G_ground_h']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='blue')
-plt.plot(timeseries['B_0_h_new']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='yellow')
-plt.plot(timeseries['D_0_h']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='purple')
+plt.plot(timeseries['G_ground_h']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='blue', linewidth=3)
+plt.plot(timeseries['B_0_h_new']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='green', linewidth=3)
+plt.plot(timeseries['D_0_h']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='red', linewidth=3)
 plt.title('Global irradiation horizontal surface (June 1st - June 7th)')
 plt.ylabel(r'$\mathrm{G(0) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
 plt.xticks(fontsize=12)
+plt.legend(['G(0)', 'B(0)','D(0)'])
+
 plt.grid(True)
 
 plt.subplot(2, 1, 2)
 # Plotting G_0_h time series for the first week of February
-plt.plot(timeseries['G_ground_h']['2018-02-01 00:00':'2018-02-08 00:00'], label='G_0_h (February)', color='blue')
-plt.plot(timeseries['G_ground_h']['2018-02-01 00:00':'2018-02-08 00:00'], label='G_0_h (February)', color='blue')
-
+plt.plot(timeseries['G_ground_h']['2018-02-01 00:00':'2018-02-08 00:00'], label='G_0_h (February)', color='blue', linewidth=3)
+plt.plot(timeseries['B_0_h_new']['2018-02-01 00:00':'2018-02-08 00:00'], label='G_0_h (February)', color='green', linewidth=3)
+plt.plot(timeseries['D_0_h']['2018-02-01 00:00':'2018-02-08 00:00'], label='G_0_h (February)', color='red', linewidth=3)
 plt.title('Global irradiation horizontal surface (Feb 1st - Feb 7th)')
 plt.ylabel(r'$\mathrm{G(0) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
 plt.xticks(fontsize=12)
@@ -286,13 +288,11 @@ plt.show()
 
 #Plotting the measured production for the first week of February and the first week of June 2018.
 
-
 # File path to the Excel file containing production data
 file_path = 'New.xlsx'
 
 # Load the production data from the Excel file
 production_data = pd.read_excel(file_path)
-
 
 ## Historical data lubrication (rearranging)
 # Extract relevant columns and reshape the data
@@ -307,6 +307,12 @@ new_index = pd.date_range(start=start_date, periods=len(hourly_data), freq='H')
 # Create a new DataFrame with the desired index and 'production' column
 Measured_Power = pd.DataFrame({'production': hourly_data}, index=new_index)
 Measured_Power = Measured_Power.iloc[:-1]
+
+# shifting data
+Measured_Power.index = Measured_Power.index - pd.DateOffset(hours=3)
+end_index = Measured_Power.index[-1] + pd.DateOffset(hours=1)  # Find the last index and add 1 hour to get the next index
+new_rows = pd.DataFrame({'production': [0, 0, 0]}, index=pd.date_range(end_index, periods=3, freq='H'))
+Measured_Power = pd.concat([Measured_Power, new_rows])
 
 # Plotting data for the first week of February and the first week of June as line plots
 plt.figure(figsize=(12, 12))
@@ -374,7 +380,7 @@ Modelled_Power = timeseries.loc[start_date:end_date, 'Total_Produced_Power']
 # Assuming 'timeseries' DataFrame contains 'Total_Produced_Power' and 'Measured_Power' columns
 
 # Calculate the difference between modeled and measured power generation
-timeseries['Error_Hourly'] = timeseries['Total_Produced_Power'] - Measured_Power['production']
+timeseries['Error_Hourly'] = timeseries['Total_Produced_Power']['2018-02-01 01:00:00':] - Measured_Power['production']
 
 # Calculate Root Mean Square Error (RMSE) for hourly generation values
 rmse_hourly = np.sqrt(np.mean(timeseries['Error_Hourly'] ** 2))

@@ -91,12 +91,9 @@ timeseries['K_t']=0.7*np.ones(len(hours))
 
 # Calculate global horizontal irradiance on the ground
 [timeseries['G_ground_h'], timeseries['solar_altitude']] = calculate_G_ground_horizontal(hours, hour_0, lon, lat, timeseries['K_t'])
-# Timeseries G_zero
-#timeseries['G_0_h'] = timeseries['K_t'] * timeseries['B_0_h']
-
 
 # Time series Diffuse irradiance on horizontal
-timeseries['D_0_h'] = timeseries['G_ground_h'] * data['Cloud']/100 
+timeseries['D_0_h'] = timeseries['G_ground_h'] * (data['Cloud']/100)
 
 # Calculate direct irradiance on horizontal
 timeseries['B_0_h_new'] = timeseries['G_ground_h'] - timeseries['D_0_h']
@@ -109,8 +106,13 @@ timeseries['F'] = calculate_diffuse_fraction(hours, hour_0, lon, lat, timeseries
 timeseries['B_ground_h']=[x*(1-y) for x,y in zip(timeseries['G_ground_h'], timeseries['F'])]
 timeseries['D_ground_h']=[x*y for x,y in zip(timeseries['G_ground_h'], timeseries['F'])]
 
+# Incident angle
+timeseries['Incident angle'] = calculate_incident_angle(hours, hour_0, lon, lat,  tilt, orientation)
+
 # Direct radiation D(B) 
 timeseries['Direct'] = timeseries['B_0_h_new'] / np.sin(np.radians(timeseries['solar_altitude']))
+timeseries['Direct'] = timeseries['Direct'] * np.maximum(0, np.cos(np.radians(timeseries['Incident angle'])))
+
 timeseries['Direct'].fillna(0, inplace=True)
 
 # Diffuse radiation D(D) *isotropic*

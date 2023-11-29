@@ -124,11 +124,18 @@ tilt_angle = np.radians(tilt)
 # Calculate albedo irradiance using the modified isotropic sky model with tilt angle
 timeseries['Albedo_Irradiance'] = reflectivity * timeseries['G_0_h'] * (1 - np.cos(tilt_angle)) / 2
 
-# Assumed module characteristics
+# Global irradiation G(Beta,alpha)
+timeseries['Global'] = timeseries['Direct'] + timeseries['Diffuse'] + timeseries['Albedo_Irradiance']
+
+# Module characteristics
 efficiency = 0.185  # Efficiency (as a fraction)
 temp_coeff_power = -0.0044  # Temperature coefficient of power (%/°C, as a fraction per °C)
 STC_temperature = 25  # STC temperature in Celsius
 STC_irradiance = 1000  # Irradiance at STC in W/m²
+NOCT = 45 # nominal operating cell temp
+
+# Temperature calc.
+timeseries['T_c'] = data['Temp'] + ((NOCT-20)/800)*timeseries['Global']
 
 # Calculate power produced in [W] by each PV module at every hour
 timeseries['Produced_Power'] = (

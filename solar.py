@@ -378,15 +378,15 @@ Modelled_Power = timeseries.loc[start_date:end_date, 'Total_Produced_Power']
 
 
 # Calculate the difference between modeled and measured power generation
-timeseries['Error_Hourly'] = timeseries['Total_Produced_Power']['2018-02-01 01:00:00':] - Measured_Power['production']
+timeseries['Error_Hourly'] = timeseries['Total_Produced_Power']['2018-02-01 01:00:00':] - Measured_Power['production']['2018-02-01 01:00:00':]
 
 # Calculate Root Mean Square Error (RMSE) for hourly generation values
-rmse_hourly = np.sqrt(np.mean(timeseries['Error_Hourly'] ** 2))
+rmse_hourly = np.sqrt(np.mean(timeseries['Error_Hourly']['2018-02-01 01:00:00':] ** 2))
 print(f"RMSE for hourly generation values: {rmse_hourly:.2f} KW")
 # Resample data to daily, weekly, and monthly frequency
-daily_errors = timeseries['Error_Hourly'].resample('D').sum()  # Resample to daily
-weekly_errors = timeseries['Error_Hourly'].resample('W').sum()  # Resample to weekly
-monthly_errors = timeseries['Error_Hourly'].resample('M').sum()  # Resample to monthly
+daily_errors = timeseries['Error_Hourly']['2018-02-01 01:00:00':].resample('D').sum()  # Resample to daily
+weekly_errors = timeseries['Error_Hourly']['2018-02-01 01:00:00':].resample('W').sum()  # Resample to weekly
+monthly_errors = timeseries['Error_Hourly']['2018-02-01 01:00:00':].resample('M').sum()  # Resample to monthly
 
 # Calculate Root Mean Square Error (RMSE) for aggregated generation values
 rmse_daily = np.sqrt(np.mean(daily_errors ** 2))

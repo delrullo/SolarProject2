@@ -173,15 +173,11 @@ plt.figure(figsize=(12, 12))
 plt.subplot(2, 1, 2)
 # Plotting G_0_h time series for the first week of June
 plt.plot(timeseries['G_ground_h']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='blue', linewidth=3)
-<<<<<<< HEAD
 plt.plot(timeseries['B_0_h_new']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='green', linewidth=3)
 plt.plot(timeseries['D_0_h']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='red', linewidth=3)
 plt.title('Global radiation on horizontal surface (June 1st - June 7th)')
 plt.ylabel(r'$\mathrm{\left[\frac{W}{m^2}\right]}$',fontsize=14)
-=======
-plt.ylabel(r'$\mathrm{G(0) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
 plt.title('Global irradiation horizontal surface (June 1st - June 7th)')
->>>>>>> f0bcd5045be7348b81c68efa201499ec6b96ec41
 plt.xticks(fontsize=12)
 plt.legend(['G(0)'])
 
@@ -190,16 +186,11 @@ plt.grid(True)
 plt.subplot(2, 1, 1)
 # Plotting G_0_h time series for the first week of February
 plt.plot(timeseries['G_ground_h']['2018-02-01 00:00':'2018-02-08 00:00'], label='G_0_h (February)', color='blue', linewidth=3)
-<<<<<<< HEAD
 plt.plot(timeseries['B_0_h_new']['2018-02-01 00:00':'2018-02-08 00:00'], label='G_0_h (February)', color='green', linewidth=3)
 plt.plot(timeseries['D_0_h']['2018-02-01 00:00':'2018-02-08 00:00'], label='G_0_h (February)', color='red', linewidth=3)
 plt.title('Global radiation on horizontal surface (Feb 1st - Feb 7th)')
 plt.ylabel(r'$\mathrm{\left[\frac{W}{m^2}\right]}$',fontsize=14)
-=======
-
 plt.title('Global irradiation horizontal surface (Feb 1st - Feb 7th)')
-plt.ylabel(r'$\mathrm{G(0) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
->>>>>>> f0bcd5045be7348b81c68efa201499ec6b96ec41
 plt.xticks(fontsize=12)
 plt.grid(True)
 

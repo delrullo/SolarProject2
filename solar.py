@@ -430,3 +430,20 @@ print(f"RMSE for weekly generation values: {rmse_weekly:.2f} KWh")
 print(f"RMSE for monthly generation values: {rmse_monthly:.2f} KWh")
 
 
+#second way of calculation
+timeseries['Err'] = timeseries['Total_Produced_Power'] - Measured_Power['production']['2018-02-01 01:00':'2018-12-31 18:00']
+#['Err'] = timeseries['Err'].fillna(0)
+timeseries['SqErr'] = timeseries['Err']**2
+timeseries['MSE'] = timeseries['SqErr'] / len(timeseries['SqErr'])
+timeseries['RMSE'] = np.sqrt(timeseries['MSE'])
+
+plt.figure(figsize=(8,7))
+#plt.xticks(rotation=FontRot)
+#plt.plot(df_mes['Power']['2018-02-01 01:00':'2018-02-08 00:00'], color='black')
+#plt.plot(timeseries['Power']['2018-02-01 01:00':'2018-02-08 00:00'], color='green')
+plt.plot(timeseries['RMSE']['2018-02-01 00:00':'2018-12-31 23:00'], color='red')
+plt.title('Root mean square error')
+plt.xlabel('Time')
+
+
+

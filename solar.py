@@ -92,6 +92,9 @@ timeseries['K_t']=0.7*np.ones(len(hours))
 # Calculate global horizontal irradiance on the ground
 [timeseries['G_ground_h'], timeseries['solar_altitude']] = calculate_G_ground_horizontal(hours, hour_0, lon, lat, timeseries['K_t'])
 
+
+
+
 # Time series Diffuse irradiance on horizontal
 timeseries['D_0_h'] = timeseries['G_ground_h'] * (data['Cloud']/100)
 
@@ -134,25 +137,27 @@ timeseries['Global'] = timeseries['Direct'] + timeseries['Diffuse'] + timeseries
 ## Plot testing
 plt.figure(figsize=(12, 12))
 plt.plot(timeseries['Direct']['2018-06-01 00:00':'2018-06-08 00:00'], label='Direct (June)', color='green')
-plt.plot(timeseries['Diffuse']['2018-06-01 00:00':'2018-06-08 00:00'], label='Diffuse (June)', color='blue')
-plt.plot(timeseries['Albedo_Irradiance']['2018-06-01 00:00':'2018-06-08 00:00'], label='Albedo_Irradiance (June)', color='red')
+plt.plot(timeseries['Diffuse']['2018-06-01 00:00':'2018-06-08 00:00'], label='Diffuse (June)', color='blue')#plt.plot(timeseries['Albedo_Irradiance']['2018-06-01 00:00':'2018-06-08 00:00'], label='Albedo_Irradiance (June)', color='red')
 plt.show()
     
 ##
 
 # Module characteristics
-efficiency = 0.185  # Efficiency (as a fraction)
+efficiency = 0.1585  # Efficiency (as a fraction)
 temp_coeff_power = -0.0044  # Temperature coefficient of power (%/°C, as a fraction per °C)
 STC_temperature = 25  # STC temperature in Celsius
 STC_irradiance = 1000  # Irradiance at STC in W/m²
 NOCT = 45 # nominal operating cell temp
+no_pv = 1000    # Number of panels
+area_pv = 1.640*0.922   # area of single panel [m^2]
 
 # Temperature calc.
 timeseries['T_c'] = data['Temp'] + ((NOCT-20)/800)*timeseries['Global']
-
+# Calculate total power
+timeseries['Power'] = efficiency*no_pv*area_pv*timeseries['Global']
 # Calculate power produced in [W] by each PV module at every hour
 timeseries['Produced_Power'] = (
-    255* (timeseries['Direct'] + timeseries['Diffuse'] + timeseries['Albedo_Irradiance']) / STC_irradiance *
+    timeseries['Power']* (timeseries['Global']) / STC_irradiance *
     (1 + temp_coeff_power * (data['Temp'] - STC_temperature))
 )
 
@@ -168,20 +173,17 @@ plt.figure(figsize=(12, 12))
 plt.subplot(2, 1, 1)
 # Plotting G_0_h time series for the first week of June
 plt.plot(timeseries['G_ground_h']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='blue', linewidth=3)
-plt.plot(timeseries['B_0_h_new']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='green', linewidth=3)
-plt.plot(timeseries['D_0_h']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='red', linewidth=3)
-plt.title('Global irradiation horizontal surface (June 1st - June 7th)')
 plt.ylabel(r'$\mathrm{G(0) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
+plt.title('Global irradiation horizontal surface (June 1st - June 7th)')
 plt.xticks(fontsize=12)
-plt.legend(['G(0)', 'B(0)','D(0)'])
+plt.legend(['G(0)'])
 
 plt.grid(True)
 
 plt.subplot(2, 1, 2)
 # Plotting G_0_h time series for the first week of February
 plt.plot(timeseries['G_ground_h']['2018-02-01 00:00':'2018-02-08 00:00'], label='G_0_h (February)', color='blue', linewidth=3)
-plt.plot(timeseries['B_0_h_new']['2018-02-01 00:00':'2018-02-08 00:00'], label='G_0_h (February)', color='green', linewidth=3)
-plt.plot(timeseries['D_0_h']['2018-02-01 00:00':'2018-02-08 00:00'], label='G_0_h (February)', color='red', linewidth=3)
+
 plt.title('Global irradiation horizontal surface (Feb 1st - Feb 7th)')
 plt.ylabel(r'$\mathrm{G(0) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
 plt.xticks(fontsize=12)
@@ -193,6 +195,31 @@ plt.tight_layout()
 # Show the plot
 plt.show()
 
+#plot for only direct and diffuse irradiation
+# Create two separate figures for February and June
+fig, axs = plt.subplots(2, figsize=(12, 12))
+# Plot for the first week of June
+axs[0].plot(timeseries['B_0_h_new']['2018-06-01 00:00':'2018-06-08 00:00'], label='Direct Irradiation (June)', color='green', linewidth=3)
+axs[0].plot(timeseries['D_0_h']['2018-06-01 00:00':'2018-06-08 00:00'], label='Diffuse Irradiation (June)', color='red', linewidth=3)
+axs[0].set_title('Global Irradiation on Horizontal Surface (June 1st - June 7th)')
+axs[0].set_ylabel(r'$\mathrm{G(0) \; \left[\frac{W}{m^2}\right]}$', fontsize=14)
+axs[0].tick_params(axis='x', labelsize=12)
+axs[0].legend()
+
+# Plot for the first week of February
+axs[1].plot(timeseries['B_0_h_new']['2018-02-01 00:00':'2018-02-08 00:00'], label='Direct Irradiation (Feb)', color='green', linewidth=3)
+axs[1].plot(timeseries['D_0_h']['2018-02-01 00:00':'2018-02-08 00:00'], label='Diffuse Irradiation (Feb)', color='red', linewidth=3)
+axs[1].set_title('Global Irradiation on Horizontal Surface (Feb 1st - Feb 7th)')
+axs[1].set_ylabel(r'$\mathrm{G(0) \; \left[\frac{W}{m^2}\right]}$', fontsize=14)
+axs[1].tick_params(axis='x', labelsize=12)
+axs[1].legend()
+
+
+# Adjust layout for better spacing
+plt.tight_layout()
+
+# Show the plots
+plt.show()
 # Create a subplot with 2 rows and 1 column
 plt.figure(figsize=(12, 12))
 

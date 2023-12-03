@@ -170,7 +170,7 @@ timeseries['Total_Produced_Power'] = (1000 * timeseries['Produced_Power']) / 100
 # Create a subplot with 2 rows and 1 column
 plt.figure(figsize=(12, 12))
 
-plt.subplot(2, 1, 1)
+plt.subplot(2, 1, 2)
 # Plotting G_0_h time series for the first week of June
 plt.plot(timeseries['G_ground_h']['2018-06-01 00:00':'2018-06-08 00:00'], label='G_0_h (June)', color='blue', linewidth=3)
 plt.ylabel(r'$\mathrm{G(0) \; \left[\frac{W}{m^2}\right]}$',fontsize=14)
@@ -180,7 +180,7 @@ plt.legend(['G(0)'])
 
 plt.grid(True)
 
-plt.subplot(2, 1, 2)
+plt.subplot(2, 1, 1)
 # Plotting G_0_h time series for the first week of February
 plt.plot(timeseries['G_ground_h']['2018-02-01 00:00':'2018-02-08 00:00'], label='G_0_h (February)', color='blue', linewidth=3)
 
@@ -300,14 +300,14 @@ plt.title('Modelled Power production (Feb 1st - Feb 7th)')
 plt.xticks(fontsize=12)
 plt.ylabel(r'$\mathrm{P_{PV} \; [KWh]}$',fontsize=14)
 plt.grid(True)
-plt.legend()
+#plt.legend()
 
 plt.subplot(2, 1, 2)
 plt.plot(june_data.index, june_data['Total_Produced_Power'], label='Power Produced (June)')
 plt.title('Modelled Power production (June 1st - June 7th)')
 plt.xticks(fontsize=12)
 plt.ylabel(r'$\mathrm{P_{PV} \; [KWh]}$',fontsize=14)
-plt.legend()
+#plt.legend()
 plt.grid(True)
 
 plt.tight_layout()
@@ -350,16 +350,16 @@ plt.subplot(2, 1, 1)
 plt.plot(Measured_Power['2018-02-01':'2018-02-08'], label='Measured Power (Feb)', color='blue')
 plt.title('Measured Power production (Feb 1st - Feb 7th)')
 plt.xticks(fontsize=12)
-plt.ylabel('Power (kW)')
-plt.legend()
+plt.ylabel(r'$\mathrm{P_{PV} \; [KWh]}$',fontsize=14)
+#plt.legend()
 plt.grid(True)
 
 # Plotting data for the first week of June
 plt.subplot(2, 1, 2)
 plt.plot(Measured_Power['2018-06-01':'2018-06-08'], label='Measured Power (June)', color='green')
 plt.title('Measured Power production (June 1st - June 7th)')
-plt.ylabel('Power (kW)')
-plt.legend()
+plt.ylabel(r'$\mathrm{P_{PV} \; [KWh]}$',fontsize=14)
+#plt.legend()
 plt.grid(True)
 plt.xticks(fontsize=12)
 plt.tight_layout()
@@ -375,7 +375,7 @@ plt.plot(Measured_Power['2018-02-01':'2018-02-08'], label='Measured Power (Feb)'
 plt.plot(feb_data.index, feb_data['Total_Produced_Power'], label='Power Produced (Feb)')
 plt.title('Power production (Feb 1st - Feb 7th)')
 plt.xticks(fontsize=12)
-plt.ylabel('Power (kW)')
+plt.ylabel(r'$\mathrm{P_{PV} \; [KWh]}$',fontsize=14)
 plt.legend()
 plt.grid(True)
     
@@ -403,8 +403,6 @@ Modelled_Power = timeseries.loc[start_date:end_date, 'Total_Produced_Power']
 
 
 
-
-# Assuming 'timeseries' DataFrame contains 'Total_Produced_Power' and 'Measured_Power' columns
 
 # Calculate the difference between modeled and measured power generation
 timeseries['Error_Hourly'] = timeseries['Total_Produced_Power']['2018-02-01 01:00:00':] - Measured_Power['production']

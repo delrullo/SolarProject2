@@ -154,7 +154,7 @@ area_pv = 1.640*0.922   # area of single panel [m^2]
 # Temperature calc.
 timeseries['T_c'] = data['Temp'] + ((NOCT-20)/800)*timeseries['Global']
 # Calculate total power
-timeseries['Power'] = efficiency*no_pv*area_pv*STC_irradiance
+timeseries['Power'] = efficiency*area_pv*STC_irradiance
 # Calculate power produced in [W] by each PV module at every hour
 timeseries['Produced_Power'] = (
     timeseries['Power']* (timeseries['Global']) / STC_irradiance *

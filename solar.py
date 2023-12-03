@@ -146,7 +146,7 @@ plt.show()
 efficiency = 0.1585  # Efficiency (as a fraction)
 temp_coeff_power = -0.0044  # Temperature coefficient of power (%/°C, as a fraction per °C)
 STC_temperature = 25  # STC temperature in Celsius
-STC_irradiance = 1000  # Irradiance at STC in W/m²
+STC_irradiance = 1  # Irradiance at STC in kW/m²
 NOCT = 45 # nominal operating cell temp
 no_pv = 1000    # Number of panels
 area_pv = 1.640*0.922   # area of single panel [m^2]
